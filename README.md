@@ -134,8 +134,10 @@ python -m experiments.run   # experiments vs baselines -> docs/EXPERIMENTS.md
 
 ## Team
 
-<!-- TODO(team): add team member names and roles before submission -->
-_Team member names to be added._
+- Fidan Karimova
+- Ziya Malikov
+- Farid Guliyev
+- Sehane Huseynzade
 
 ## License
 
