@@ -16,6 +16,8 @@ chain) and to a hash-chained audit log.
 
 > *A good financial agent is not one that always closes a deal; it is one that refuses a bad one.*
 
+**Source:** https://github.com/fidankarimova/CashPilot
+
 All money math, limits and approvals are deterministic code. The LLM agents only propose, argue and explain; an
 LLM output can never move money or bypass a check. The bank is simulated: this is a regulation-aware architecture
 with simulated fiat execution and no production banking access.
@@ -53,6 +55,7 @@ service (trusted server-side code), not a zero-knowledge proof**.
 ## Quick start
 
 ```bash
+git clone --recurse-submodules https://github.com/fidankarimova/CashPilot.git && cd CashPilot
 make install        # Python 3.11+ venv + package (pip install -e .)
 make test           # forge test (contracts) + pytest
 make flow           # full flow in the terminal: detection -> negotiation -> approvals -> bank -> settlement -> ledger
@@ -117,6 +120,17 @@ python -m experiments.run   # experiments vs baselines -> docs/EXPERIMENTS.md
 - [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md): BILNO vs baselines on 200 scenarios, including where BILNO is not better
 - Component notes: [LEDGER](docs/LEDGER.md), [BANK_SANDBOX](docs/BANK_SANDBOX.md),
   [COORDINATOR](docs/COORDINATOR.md), [UI](docs/UI.md)
+
+## Submission map
+
+| Item | File |
+|---|---|
+| 1. Technical documentation | [docs/TECHNICAL_DOC.md](docs/TECHNICAL_DOC.md) (+ [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md)) |
+| 2. Presentation deck | separate |
+| 3. Demo video | separate, ≤ 5 min |
+| 4. Source code | this repository: README + tests ([evidence/test_results.txt](evidence/test_results.txt)) |
+| 5. Security self-assessment | [docs/SECURITY_SELF_ASSESSMENT.md](docs/SECURITY_SELF_ASSESSMENT.md) |
+| 6. Execution evidence | [docs/EXECUTION_EVIDENCE.md](docs/EXECUTION_EVIDENCE.md) + [evidence/](evidence/) (bank sandbox logs, audit logs, ledger tx hashes, UI screenshots) |
 
 ## Team
 

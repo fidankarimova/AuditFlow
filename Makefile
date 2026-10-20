@@ -4,8 +4,12 @@ PYTHON ?= .venv/bin/python
 
 .PHONY: install build test test-contracts test-py coverage deploy deploy-local ping up bank coordinator supplier buyer flow audit-verify demo ui
 
+# First Python >= 3.11 on PATH (override with `make install PY=/path/to/python3.12`)
+PY ?= $(shell for p in python3.13 python3.12 python3.11 python3; do command -v $$p >/dev/null 2>&1 && $$p -c 'import sys; sys.exit(sys.version_info < (3, 11))' 2>/dev/null && echo $$p && break; done)
+
 install:
-	python3 -m venv .venv
+	@test -n "$(PY)" || (echo "Python 3.11+ not found; install it or pass PY=/path/to/python3.11" && exit 1)
+	$(PY) -m venv .venv
 	.venv/bin/pip install -e .
 
 build:
