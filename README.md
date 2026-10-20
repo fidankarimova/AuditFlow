@@ -89,8 +89,8 @@ python -m experiments.run   # experiments vs baselines -> docs/EXPERIMENTS.md
 
 | Target | Status |
 |---|---|
-| **Base Sepolia** (EVM testnet, chain 84532) | Deployed by `contracts/script/Deploy.s.sol`. `InvoiceRegistry` `0xbcc371e3dfa3dc96e086bf46a673fd5abac873e4`, `AgreementLedger` `0xad29ca179ca4aef902e461d556e1872d7300546d` (`deployments/base-sepolia.json`) |
-| **Local anvil** (chain 31337) | Used by the tests, `make flow` and the committed execution evidence. It is a local test chain, **not** a public testnet |
+| **Base Sepolia** (EVM testnet, chain 84532) | Deployed by `contracts/script/Deploy.s.sol`. `InvoiceRegistry` `0xbcc371e3dfa3dc96e086bf46a673fd5abac873e4`, `AgreementLedger` `0xad29ca179ca4aef902e461d556e1872d7300546d` (`deployments/base-sepolia.json`). The committed execution evidence (`docs/EXECUTION_EVIDENCE.md`) is a Base Sepolia run with Basescan links |
+| **Local anvil** (chain 31337) | Used by the tests and `make flow`. It is a local test chain, **not** a public testnet |
 | FISCO BCOS 3.x | **Not implemented** (interface stub only). See `docs/LEDGER.md` |
 
 ## Repository

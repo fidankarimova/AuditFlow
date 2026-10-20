@@ -25,7 +25,6 @@ __pycache__/
 .DS_Store
 
 # Leftover Gradle/Spring scaffold
-.gradle/
 build/
 
 # Local rehearsal deployment

@@ -223,7 +223,7 @@ stateDiagram-v2
   exact terms were committed, who approved which hash, and that settlement happened once. On the ledger these facts
   are checked by contract rules that the coordinator cannot bypass (e.g. no submission without both approvals,
   enforced on-chain). Each party can verify them without trusting the coordinator's database.
-- **Targets.** Base Sepolia (deployed: `deployments/base-sepolia.json`) and local anvil (tests, evidence).
+- **Targets.** Base Sepolia (deployed: `deployments/base-sepolia.json`) (execution evidence) and local anvil (tests, `make flow`).
   FISCO BCOS is **not implemented** (`docs/LEDGER.md`).
 
 ## 10. Experiments (summary of `docs/EXPERIMENTS.md`)
@@ -254,7 +254,6 @@ The setup:
 
 | Gap | Status |
 |---|---|
-| Public-testnet execution evidence | The committed `EXECUTION_EVIDENCE.md` is from a **local anvil** run. A Base Sepolia run needs the team's funded `.env` (`make demo LEDGER=configured`) |
 | Online LLM mode | Implemented; the SDK request/response path is tested with a mocked transport (`test_online_backend_request_shape_and_turn`). It was not run against the live API in this repository |
 | FISCO BCOS | Not implemented (stub raises) |
 | Zero-knowledge proofs | None. Privacy is a trusted server-side policy service |
@@ -265,6 +264,5 @@ The setup:
 | Rationale leakage in online mode | Prompt-level only, no code filter (`docs/COORDINATOR.md`) |
 | Gain-bucket visibility | The deal record (BILNO result incl. both gain buckets) is shown to every role in the demo UI; it should be coordinator/auditor-only |
 | Service authentication | The services have no authentication between them, and the role switcher in the UI is not authentication |
-| Leftover Spring/Gradle scaffold (`build.gradle`, `src/`, `gradle*`, `HELP.md`) | Unrelated to AuditFlow; candidate for removal |
 
 See `docs/SECURITY_SELF_ASSESSMENT.md` for the threat model and the risk register.
