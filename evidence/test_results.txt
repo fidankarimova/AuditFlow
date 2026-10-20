@@ -1,4 +1,4 @@
-# Final test run: 2026-10-20 10:21 UTC, after the FISCO BCOS support (ChainTime) change
+# Test run: 2026-10-20 11:36 UTC, before the Phase 9 Base Sepolia evidence run
 # Command: make test   (= cd contracts && forge test -vv ; .venv/bin/python -m pytest -q)
 # forge Version: 1.8.5, Python 3.12.3
 
@@ -19,7 +19,7 @@ Ran 14 tests for test/InvoiceRegistry.t.sol:InvoiceRegistryTest
 [PASS] test_RevertWhen_SettleUnconfirmed() (gas: 239632)
 [PASS] test_RevertWhen_UnauthorizedRegistration() (gas: 178248)
 [PASS] test_SellerRegistersDirectly() (gas: 205921)
-Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 2.66ms (4.86ms CPU time)
+Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 2.33ms (2.79ms CPU time)
 
 Ran 25 tests for test/AgreementLedger.t.sol:AgreementLedgerTest
 [PASS] test_AgreementHashMatchesOffChainEIP712() (gas: 277979)
@@ -47,8 +47,8 @@ Ran 25 tests for test/AgreementLedger.t.sol:AgreementLedgerTest
 [PASS] test_RevertWhen_SupersedeAfterSubmission() (gas: 621245)
 [PASS] test_RevertWhen_VersionNotIncreasing() (gas: 558461)
 [PASS] test_SettlementStillRecordedWhilePaused() (gas: 725957)
-Suite result: ok. 25 passed; 0 failed; 0 skipped; finished in 2.69ms (14.81ms CPU time)
+Suite result: ok. 25 passed; 0 failed; 0 skipped; finished in 2.56ms (16.09ms CPU time)
 
-Ran 2 test suites in 7.25ms (5.35ms CPU time): 39 tests passed, 0 failed, 0 skipped (39 total tests)
+Ran 2 test suites in 6.67ms (4.89ms CPU time): 39 tests passed, 0 failed, 0 skipped (39 total tests)
 .................................................................        [100%]
-65 passed in 63.89s (0:01:03)
+65 passed in 64.53s (0:01:04)

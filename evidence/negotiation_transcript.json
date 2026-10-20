@@ -1,0 +1,280 @@
+{
+  "scenario_A_deal": {
+    "negotiation_id": "neg_a4a22c88cce6",
+    "invoice_number": "ALF-E1020113723-0142",
+    "rounds": [
+      {
+        "side": "seller",
+        "round": 1,
+        "action": "offer",
+        "x": 62000.0,
+        "d": 0.021,
+        "rationale": "Proposed terms for this round.",
+        "mode": "offline",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "x": 62000.0,
+              "d": 0.021
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "x": 62000.0,
+              "d": 0.021,
+              "rationale": "Proposed terms for this round."
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "seller private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "buyer",
+        "round": 1,
+        "action": "offer",
+        "x": 62000.0,
+        "d": 0.029,
+        "rationale": "Proposed terms for this round.",
+        "mode": "offline",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "x": 62000.0,
+              "d": 0.029
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "x": 62000.0,
+              "d": 0.029,
+              "rationale": "Proposed terms for this round."
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "buyer private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "seller",
+        "round": 2,
+        "action": "offer",
+        "x": 62000.0,
+        "d": 0.023,
+        "rationale": "Proposed terms for this round.",
+        "mode": "offline",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "x": 62000.0,
+              "d": 0.023
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "x": 62000.0,
+              "d": 0.023,
+              "rationale": "Proposed terms for this round."
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "seller private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "buyer",
+        "round": 2,
+        "action": "offer",
+        "x": 62000.0,
+        "d": 0.027,
+        "rationale": "Proposed terms for this round.",
+        "mode": "offline",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "x": 62000.0,
+              "d": 0.027
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "x": 62000.0,
+              "d": 0.027,
+              "rationale": "Proposed terms for this round."
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "buyer private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "seller",
+        "round": 3,
+        "action": "offer",
+        "x": 62000.0,
+        "d": 0.025,
+        "rationale": "Proposed terms for this round.",
+        "mode": "offline",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "x": 62000.0,
+              "d": 0.025
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "x": 62000.0,
+              "d": 0.025,
+              "rationale": "Proposed terms for this round."
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "seller private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "buyer",
+        "round": 3,
+        "action": "accept",
+        "x": 62000.0,
+        "d": 0.025,
+        "rationale": "The counter-offer meets our requirements.",
+        "mode": "offline",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "x": 62000.0,
+              "d": 0.025
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "accept",
+              "x": 62000.0,
+              "d": 0.025,
+              "rationale": "The counter-offer meets our requirements."
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "buyer private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      }
+    ],
+    "outcome": "AGREEMENT",
+    "close_check": {
+      "supplier_feasible": true,
+      "buyer_feasible": true,
+      "nash_product": 490000.0,
+      "optimum_nash_product": 490000.0,
+      "within_tolerance": true
+    },
+    "bilno": {
+      "status": "AGREEMENT",
+      "recommendation": "early_payment",
+      "x": 62000.0,
+      "d": 0.025,
+      "pay_amount": 60450.0,
+      "supplier_gain_bucket": 7,
+      "buyer_gain_bucket": 7,
+      "nash_product": 490000.0,
+      "apr": 0.15598290598290598,
+      "supplier_evaluations": 130,
+      "buyer_evaluations": 75,
+      "feasible_points": 57
+    },
+    "agreed": {
+      "x": 62000.0,
+      "d": 0.025
+    },
+    "recommendation": "early_payment"
+  },
+  "scenario_B_no_deal": {
+    "negotiation_id": "neg_cbd8e947d181",
+    "invoice_number": "ALF-E1020113723B-0142",
+    "rounds": [],
+    "outcome": "NO_FEASIBLE_AGREEMENT",
+    "close_check": null,
+    "bilno": {
+      "status": "NO_FEASIBLE_AGREEMENT",
+      "recommendation": "bank_loan",
+      "x": null,
+      "d": null,
+      "pay_amount": null,
+      "supplier_gain_bucket": null,
+      "buyer_gain_bucket": null,
+      "nash_product": null,
+      "apr": null,
+      "supplier_evaluations": 100,
+      "buyer_evaluations": 45,
+      "feasible_points": 0
+    },
+    "agreed": null,
+    "recommendation": "bank_loan"
+  }
+}

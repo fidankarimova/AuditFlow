@@ -1,8 +1,8 @@
 {
-  "deal_id": "D-c2a1045733",
+  "deal_id": "D-c30fc84d42",
   "state": "REJECTED",
   "invoice": {
-    "number": "ALF-E1020095128B-0142",
+    "number": "ALF-E1020113723B-0142",
     "seller": "Alpha Foods",
     "buyer": "Beta Markets",
     "face": 100000.0,
@@ -13,15 +13,15 @@
     "payee_account": "SBX-TR-ALPHA-0001",
     "status": "open"
   },
-  "invoice_hash": "0x32f6544f67235584660138806c7809c50f515b01693c076389a4ce61e473a65b",
-  "ledger_invoice_id": 3,
+  "invoice_hash": "0xc779bdbeeca1ea0a7c35b17d6fc7fa4dca4ac70f7c65a813a1f3ce5ccc08c1fa",
+  "ledger_invoice_id": 5,
   "payment_id": null,
   "payment": null,
   "agreement": null,
   "versions": [],
   "negotiation": {
-    "negotiation_id": "neg_6f479b8e6e2c",
-    "invoice_number": "ALF-E1020095128B-0142",
+    "negotiation_id": "neg_cbd8e947d181",
+    "invoice_number": "ALF-E1020113723B-0142",
     "rounds": [],
     "evaluations": {
       "supplier": 100,
@@ -705,15 +705,15 @@
   ],
   "history": [
     {
-      "ts": "2026-10-20T09:52:20.660+00:00",
+      "ts": "2026-10-20T11:38:11.731+00:00",
       "from_state": null,
       "to_state": "VERIFIED",
       "actor": "coordinator",
       "note": "buyer confirmation signature verified",
-      "ledger_tx": "0x568b6e63a8c0604405d617d36246db6d485bd1d17433fe95803542dfdc17ef99"
+      "ledger_tx": "0xf379db770378998762ef733b0e9c5249ea7c2c1251e0d74ff7f43cddb04ddb9b"
     },
     {
-      "ts": "2026-10-20T09:52:22.027+00:00",
+      "ts": "2026-10-20T11:38:13.219+00:00",
       "from_state": "VERIFIED",
       "to_state": "REJECTED",
       "actor": "coordinator",
@@ -723,17 +723,17 @@
   ],
   "ledger_txs": [
     {
-      "ts": "2026-10-20T09:52:16.649+00:00",
+      "ts": "2026-10-20T11:38:07.345+00:00",
       "action": "registerInvoice",
-      "tx_hash": "0x4c2104cdcde494c786fe4195aab23530769361024b84dce9163a7ece2c69ff4e",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x4c2104cdcde494c786fe4195aab23530769361024b84dce9163a7ece2c69ff4e",
+      "tx_hash": "0x74ce8d33adebe55801b6f9642b8830f506b9e0ac81445a6f69515de17fdb134f",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x74ce8d33adebe55801b6f9642b8830f506b9e0ac81445a6f69515de17fdb134f",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:52:20.650+00:00",
+      "ts": "2026-10-20T11:38:11.727+00:00",
       "action": "confirmByBuyerWithSig",
-      "tx_hash": "0x568b6e63a8c0604405d617d36246db6d485bd1d17433fe95803542dfdc17ef99",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x568b6e63a8c0604405d617d36246db6d485bd1d17433fe95803542dfdc17ef99",
+      "tx_hash": "0xf379db770378998762ef733b0e9c5249ea7c2c1251e0d74ff7f43cddb04ddb9b",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xf379db770378998762ef733b0e9c5249ea7c2c1251e0d74ff7f43cddb04ddb9b",
       "note": null
     }
   ],

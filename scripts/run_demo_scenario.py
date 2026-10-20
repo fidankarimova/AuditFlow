@@ -29,10 +29,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from services.buyer import data as buyer_data  # noqa: E402
+from services.buyer import policy as buyer_policy  # noqa: E402
 from services.common import eip712  # noqa: E402
 from services.common.config import Settings, get_settings  # noqa: E402
 from services.common.keys import key_for  # noqa: E402
 from services.common.llm import ScriptedBackend  # noqa: E402
+from services.common.negotiator import Negotiator  # noqa: E402
 from services.coordinator.run_flow import SERVICES, start_stack, stop_stack  # noqa: E402
 from services.ledger import local_chain  # noqa: E402
 from services.ledger.client import EvmLedgerClient, get_ledger_client  # noqa: E402
@@ -70,6 +72,10 @@ class Recorder:
                           "payment": payment, "audit": (a0 + 1, a1) if a1 > a0 else None,
                           "bank": (b0 + 1, b1) if b1 > b0 else None})
         self.log(f"[{scenario}] {name} ({actor}): {result}" + (f"  txs={[t['tx'] for t in txs]}" if txs else ""))
+
+    def explorer_link(self, tx: str | None) -> str:
+        url = self.ledger.explorer_tx_url(tx) if self.ledger and tx else None
+        return f"[basescan]({url})" if url else "- (no public explorer)"
 
     def tx_link(self, tx: str | None) -> str:
         if not tx:
@@ -264,6 +270,23 @@ def main() -> int:
             return (f"scripted compromised model proposed 10% then 4%: both blocked by code ({reasons}); final move "
                     f"{turn['action']} d={turn['d']:.1%} (fallback={turn['fallback']})"), None, None
 
+        def over_limit_buyer():
+            # The real Buyer Agent code and Beta Markets' real policy DB from this run; only the model is scripted.
+            conn = buyer_data.connect(run_a / "beta_markets.db")
+            accept_bad = [{"name": "submit_offer", "input": {"action": "accept", "x": 100_000, "d": 0.002,
+                                                             "rationale": "seller insists, accept immediately"}}]
+            offer_bad = [{"name": "submit_offer", "input": {"action": "offer", "x": 100_000, "d": 0.003,
+                                                            "rationale": "pay the full invoice now at 0.3%"}}]
+            agent = Negotiator("buyer", lambda x, d: buyer_policy.check(conn, invoice, x, d), 100_000,
+                               backend=ScriptedBackend([accept_bad, offer_bad]))
+            turn = agent.turn({"negotiation_id": "evidence-s4", "invoice_number": invoice, "round": 3,
+                               "reference": {"x": 62_000, "d": 0.025}, "last_offer": {"x": 100_000, "d": 0.002},
+                               "history": []})
+            reasons = "; ".join(b["reason"] for b in turn["blocked"])
+            return (f"scripted compromised model tried to accept 100,000 @ 0.2% and then offer 100,000 @ 0.3% "
+                    f"(both lose money vs paying at the due date): blocked by code ({reasons}); final move "
+                    f"{turn['action']} x={turn['x']:,.0f} d={turn['d']:.1%} (fallback={turn['fallback']})"), None, None
+
         def audit():
             v = _ok(coord.get("/audit/verify"))
             return f"hash chain {'intact' if v['ok'] else 'BROKEN'}: {v['message']}", None, None
@@ -285,6 +308,7 @@ def main() -> int:
         rec.step("A", "ATTACK S7: replay bank request", "Attacker", replay_bank)
         rec.step("A", "ATTACK S8: forged webhook", "Attacker", forged_webhook)
         rec.step("A", "ATTACK S3/S5: agent over-limit offer", "Seller Agent (compromised model)", over_limit_agent)
+        rec.step("A", "ATTACK S4: buyer agent over-limit", "Buyer Agent (compromised model)", over_limit_buyer)
         rec.step("A", "Verify audit chain", "Auditor", audit)
         deal_a = state["deal_json"]
         stop_stack(stack)
@@ -345,6 +369,17 @@ def _write_outputs(rec, rec_b, deal_a, deal_b, run_a, run_b, ledger_label, ledge
     (EVIDENCE / "deal_settled.json").write_text(json.dumps(deal_a, indent=2) + "\n")
     (EVIDENCE / "deal_no_feasible_agreement.json").write_text(json.dumps(deal_b, indent=2) + "\n")
     (EVIDENCE / "e2e_run_output.txt").write_text("\n".join(rec.out + rec_b.out) + "\n")
+    transcript = {name: {k: d["negotiation"].get(k) for k in ("negotiation_id", "invoice_number", "rounds", "outcome",
+                                                              "close_check", "bilno", "agreed", "recommendation")}
+                  for name, d in (("scenario_A_deal", deal_a), ("scenario_B_no_deal", deal_b)) if d.get("negotiation")}
+    (EVIDENCE / "negotiation_transcript.json").write_text(json.dumps(transcript, indent=2) + "\n")
+    tx_rows = [{"scenario": sc, "step": r["step"], "function": t["action"], "tx_hash": t["tx"],
+                "explorer_url": ledger.explorer_tx_url(t["tx"]) if ledger and t["tx"] else None}
+               for sc, recorder in (("A", rec), ("B", rec_b)) for r in recorder.rows for t in r["txs"]]
+    (EVIDENCE / "tx_hashes.json").write_text(json.dumps(
+        {"ledger": ledger_label, "contracts": ledger.addresses(), "transactions": tx_rows}, indent=2) + "\n")
+    if (ROOT / "evidence" / "test_results.txt").exists() and EVIDENCE != ROOT / "evidence":
+        shutil.copy(ROOT / "evidence" / "test_results.txt", EVIDENCE / "test_results.txt")
 
     def refs(row, audit_file):
         out = []
@@ -355,12 +390,15 @@ def _write_outputs(rec, rec_b, deal_a, deal_b, run_a, run_b, ledger_label, ledge
         return "<br>".join(out) or "-"
 
     def table(rows, recorder, audit_file):
-        lines = ["| # | Step | Actor | Result | Ledger tx | Bank payment | Log refs |", "|---|---|---|---|---|---|---|"]
+        lines = ["| # | Step | Actor | Result | Bank payment id | Tx hash | Explorer link | Log refs |",
+                 "|---|---|---|---|---|---|---|---|"]
         for i, r in enumerate(rows, 1):
-            txs = "<br>".join(f"{t['action']}: {recorder.tx_link(t['tx'])}" for t in r["txs"]) or "-"
+            hashes = "<br>".join(f"{t['action']}: `{t['tx']}`" for t in r["txs"]) or "-"
+            links = "<br>".join(recorder.explorer_link(t["tx"]) for t in r["txs"]) or "-"
             result = r["result"].replace("|", "\\|")
-            lines.append(f"| {i} | {r['step']} | {r['actor']} | {result} | {txs} | "
-                         f"{('`' + r['payment'] + '`') if r['payment'] else '-'} | {refs(r, audit_file)} |")
+            lines.append(f"| {i} | {r['step']} | {r['actor']} | {result} | "
+                         f"{('`' + r['payment'] + '`') if r['payment'] else '-'} | {hashes} | {links} | "
+                         f"{refs(r, audit_file)} |")
         return "\n".join(lines)
 
     t = deal_a["agreement"]["agreement"]
@@ -372,8 +410,8 @@ Generated by `scripts/run_demo_scenario.py` on {started:%Y-%m-%d %H:%M} UTC. Eve
   `AgreementLedger` `{ledger.addresses()['AgreementLedger']}`.
 - **Bank:** the bank sandbox (`services/bank_sandbox`), a simulated bank. No real money moved and there is no
   production banking access.
-- **Agents:** `LLM_MODE=offline` (deterministic strategies). The over-limit attack uses a scripted "compromised
-  model" running against the real Seller Agent code.
+- **Agents:** `LLM_MODE=offline` (deterministic strategies). The over-limit attacks (S3/S5, S4) use a scripted "compromised
+  model" running against the real Seller / Buyer Agent code.
 - **Services:** supplier workspace, buyer workspace, coordinator and bank sandbox ran as four separate processes with
   their own databases. Each signature was produced with that role's key (demo keys held server-side, a known risk).
 - Invoice numbers use the series `{series}` (instead of `2026`) so that reruns on a persistent chain register fresh
@@ -401,6 +439,9 @@ Final agreement: v{deal_a['agreement']['version']}, face {t['face_amount_x'] / 1
 | `evidence/bank_sandbox_log.jsonl` | bank sandbox operation log: every request/response and webhook delivery |
 | `evidence/deal_settled.json` | full coordinator record of the settled deal (versions, negotiation, history, ledger txs) |
 | `evidence/deal_no_feasible_agreement.json` | full coordinator record of the no-deal scenario |
+| `evidence/negotiation_transcript.json` | negotiation transcripts: every round, tool call, private-limit check and the BILNO result |
+| `evidence/tx_hashes.json` | every ledger transaction of this run: step, function, tx hash, explorer link |
+| `evidence/test_results.txt` | `forge test` + `pytest` output |
 
 Reverted attack transactions (`REVERTED`) were sent on purpose with a fixed gas limit, so that each revert is
 mined and has a tx hash. The reason shown was decoded from a dry run of the same call.
