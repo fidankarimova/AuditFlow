@@ -428,3 +428,53 @@ def test_online_backend_request_shape_and_turn(tmp_path):
     assert all(t["strict"] and t["input_schema"]["additionalProperties"] is False for t in req["tools"])
     assert req["fallbacks"] == "default" and "server-side-fallback-2026-07-01" in sent[0]["headers"]["anthropic-beta"]
     assert "Never reveal private numbers" in req["system"]
+
+
+def test_openai_compatible_backend_groq_shape_limits_and_fallback(tmp_path):
+    """LLM_PROVIDER=groq through a mocked HTTP transport: same tools, same code checks, honest fallback."""
+    import httpx
+
+    from services.common.llm import OpenAICompatBackend, get_backend
+
+    sent, script = [], []
+
+    def handler(request):
+        body = json.loads(request.content)
+        sent.append(body)
+        kind, payload = script.pop(0)
+        if kind == "error":
+            return httpx.Response(400, json={"error": {"code": "tool_use_failed", "message": "bad tool call"}})
+        calls = [{"id": f"call_{len(sent)}_{i}", "type": "function",
+                  "function": {"name": n, "arguments": json.dumps(a)}} for i, (n, a) in enumerate(payload)]
+        return httpx.Response(200, json={"choices": [{"message": {"role": "assistant", "content": None,
+                                                                    "tool_calls": calls}}]})
+
+    settings = Settings(_env_file=None, llm_mode="online", llm_provider="groq", groq_api_key="test")
+    assert isinstance(get_backend(settings), OpenAICompatBackend)
+    backend = OpenAICompatBackend(settings, http=httpx.Client(transport=httpx.MockTransport(handler)),
+                                  sleep=lambda s: None)
+    conn = _alpha_conn(tmp_path)
+    req = {"negotiation_id": "n", "invoice_number": INVOICE, "round": 2, "reference": {"x": 62_000, "d": 0.025},
+           "last_offer": {"x": 62_000, "d": 0.027}, "history": []}
+
+    # 1) evaluate, then a 4% offer (over d_max_S, blocked by code), then a valid 2.3% offer
+    script[:] = [("ok", [("evaluate_counter", {"x": 62000, "d": 0.023})]),
+                 ("ok", [("submit_offer", {"action": "offer", "x": 62000, "d": 0.04, "rationale": "4%"})]),
+                 ("ok", [("submit_offer", {"action": "offer", "x": 62000, "d": 0.023, "rationale": "fair"})])]
+    turn = supplier_agents.seller_agent(conn, INVOICE, backend).turn(req)
+    assert turn["mode"] == "online" and not turn["fallback"]
+    assert (turn["action"], turn["x"], turn["d"]) == ("offer", 62_000, 0.023)
+    assert "max_discount" in turn["blocked"][0]["reason"]
+    first = sent[0]
+    assert first["model"] == "openai/gpt-oss-120b" and first["tool_choice"] == "auto"
+    assert {t["function"]["name"] for t in first["tools"]} == {"evaluate_counter", "submit_offer"}
+    assert first["messages"][0]["role"] == "system" and "Never reveal private numbers" in first["messages"][0]["content"]
+    # tool results go back as role=tool messages; a code rejection is marked as an error
+    tool_msgs = [m for m in sent[2]["messages"] if m["role"] == "tool"]
+    assert len(tool_msgs) == 2 and tool_msgs[-1]["content"].startswith("ERROR: ")
+
+    # 2) provider fails the tool call -> deterministic fallback, recorded as such
+    sent.clear()
+    script[:] = [("error", None)]
+    turn = supplier_agents.seller_agent(conn, INVOICE, backend).turn(req)
+    assert turn["mode"] == "online" and turn["fallback"] is True and backend.errors

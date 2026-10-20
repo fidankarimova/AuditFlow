@@ -255,7 +255,7 @@ The setup:
 
 | Gap | Status |
 |---|---|
-| Online LLM mode | Implemented; the SDK request/response path is tested with a mocked transport (`test_online_backend_request_shape_and_turn`). `scripts/run_online_negotiation.py` runs one live negotiation, but it was **not run**: the team has no paid Anthropic API key. All evidence is from `LLM_MODE=offline` |
+| Online LLM mode | Two providers behind one tool-calling interface: Anthropic (Claude; tested with a mocked transport, not run live: no paid key) and an OpenAI-compatible provider, Groq (`LLM_PROVIDER=groq`; mocked test `test_openai_compatible_backend_groq_shape_limits_and_fallback`). One live happy-path negotiation ran on Groq `openai/gpt-oss-120b` (`llama-3.3-70b-versatile`, the first choice, is no longer served by Groq): the model answered 3 of 5 rounds, and the close check refused the final terms (Nash product 18% below the optimum), see the Online LLM run section of `docs/EXECUTION_EVIDENCE.md`. All other evidence is offline |
 | FISCO BCOS | Runs on a **local** 4-node chain on one machine (all nodes run by us), via the Web3 RPC, not FISCO's native SDK. Not a multi-organization deployment |
 | Zero-knowledge proofs | None. Privacy is a trusted server-side policy service |
 | BILNO safety margin and partial relief | Not implemented (see §10) |

@@ -34,6 +34,11 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     llm_model: str = ""
     llm_mode: Literal["offline", "online"] = "offline"
+    # online provider: anthropic (Claude) or groq (OpenAI-compatible chat completions API)
+    llm_provider: Literal["anthropic", "groq"] = "anthropic"
+    groq_api_key: str = ""
+    groq_model: str = "openai/gpt-oss-120b"  # llama-3.3-70b-versatile is no longer served by Groq (model_not_found)
+    groq_base_url: str = "https://api.groq.com/openai/v1"
 
     # Service URLs
     supplier_url: str = "http://127.0.0.1:8101"

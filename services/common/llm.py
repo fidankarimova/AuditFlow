@@ -151,9 +151,84 @@ class ScriptedBackend:
         return Reply(content, uses, "", "tool_use")
 
 
+class OpenAICompatBackend:
+    """Any OpenAI-compatible chat-completions API with function calling (LLM_PROVIDER=groq).
+
+    Same Backend interface as AnthropicBackend: the tool loop, registries and policy checks are unchanged. The
+    Anthropic-style history (tool_use / tool_result blocks) is translated to assistant tool_calls and tool messages.
+    A provider-side tool-call failure (HTTP 400 tool_use_failed) is returned as a reply without tool calls, so the
+    agent's deterministic fallback takes the turn and the transcript records fallback=true.
+    """
+
+    def __init__(self, settings: Settings | None = None, http=None, sleep=None):
+        import time
+
+        import httpx
+
+        s = settings or get_settings()
+        if not s.groq_api_key:
+            raise RuntimeError("LLM_PROVIDER=groq needs GROQ_API_KEY")
+        self.provider, self.model, self.base_url = "groq", s.groq_model, s.groq_base_url.rstrip("/")
+        self.http = http or httpx.Client(timeout=120, headers={"Authorization": f"Bearer {s.groq_api_key}"})
+        self.sleep = sleep or time.sleep
+        self.errors: list[str] = []
+
+    @staticmethod
+    def _messages(system: str, messages: list) -> list[dict]:
+        out = [{"role": "system", "content": system}]
+        for m in messages:
+            content = m["content"]
+            if isinstance(content, str):
+                out.append({"role": m["role"], "content": content})
+            elif m["role"] == "assistant":
+                text = "".join(b.get("text", "") for b in content if b.get("type") == "text")
+                calls = [{"id": b["id"], "type": "function",
+                          "function": {"name": b["name"], "arguments": json.dumps(b["input"])}}
+                         for b in content if b.get("type") == "tool_use"]
+                out.append({"role": "assistant", "content": text or None, **({"tool_calls": calls} if calls else {})})
+            else:  # user turn holding tool results
+                for b in content:
+                    body = b["content"] if isinstance(b["content"], str) else json.dumps(b["content"])
+                    out.append({"role": "tool", "tool_call_id": b["tool_use_id"],
+                                "content": ("ERROR: " + body) if b.get("is_error") else body})
+        return out
+
+    def respond(self, system: str, messages: list, tools: list[dict]) -> Reply:
+        payload = {
+            "model": self.model, "temperature": 0, "tool_choice": "auto",
+            "messages": self._messages(system, messages),
+            "tools": [{"type": "function", "function": {"name": t["name"], "description": t["description"],
+                                                         "parameters": t["input_schema"]}} for t in tools],
+        }
+        for attempt in range(6):
+            r = self.http.post(f"{self.base_url}/chat/completions", json=payload)
+            if r.status_code == 429 or r.status_code >= 500:  # rate limit / provider hiccup: wait and retry
+                self.sleep(min(30.0, float(r.headers.get("retry-after") or 2 * (attempt + 1))))
+                continue
+            break
+        if r.status_code == 400 and "tool_use_failed" in r.text:
+            self.errors.append(r.text[:500])
+            return Reply([{"type": "text", "text": ""}], [], f"provider error: {r.text[:300]}", "error")
+        r.raise_for_status()
+        msg = r.json()["choices"][0]["message"]
+        uses = []
+        for c in msg.get("tool_calls") or []:
+            try:
+                args = json.loads(c["function"]["arguments"] or "{}")
+            except json.JSONDecodeError:
+                args = {}  # the registry rejects missing arguments in code
+            uses.append({"id": c["id"], "name": c["function"]["name"], "input": args if isinstance(args, dict) else {}})
+        text = msg.get("content") or ""
+        content = ([{"type": "text", "text": text}] if text else []) + \
+            [{"type": "tool_use", "id": u["id"], "name": u["name"], "input": u["input"]} for u in uses]
+        return Reply(content, uses, text, "tool_use" if uses else "end_turn")
+
+
 def get_backend(settings: Settings | None = None) -> Backend | None:
     s = settings or get_settings()
-    return AnthropicBackend(s) if s.llm_mode == "online" else None
+    if s.llm_mode != "online":
+        return None
+    return OpenAICompatBackend(s) if s.llm_provider == "groq" else AnthropicBackend(s)
 
 
 @dataclass

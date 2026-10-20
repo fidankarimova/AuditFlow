@@ -1,0 +1,1092 @@
+{
+  "started": "2026-10-20 13:25",
+  "llm_mode": "online",
+  "provider": "groq",
+  "base_url": "https://api.groq.com/openai/v1",
+  "model": "openai/gpt-oss-120b",
+  "ledger": "disabled (LEDGER_TARGET=none)",
+  "invoice": "ALF-L1020132516-0142",
+  "deal_id": "D-c7d9ee480c",
+  "state": "REJECTED",
+  "negotiation": {
+    "negotiation_id": "neg_420fb21b9011",
+    "invoice_number": "ALF-L1020132516-0142",
+    "rounds": [
+      {
+        "side": "seller",
+        "round": 1,
+        "action": "offer",
+        "x": 98000.0,
+        "d": 0.02,
+        "rationale": "We propose an early payment discount of 2% (paying 98,000 TL now) which aligns with our cash flow preferences while offering you a prompt settlement.",
+        "mode": "online",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.02,
+              "x": 98000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "d": 0.02,
+              "rationale": "We propose an early payment discount of 2% (paying 98,000 TL now) which aligns with our cash flow preferences while offering you a prompt settlement.",
+              "x": 98000
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "seller private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "buyer",
+        "round": 1,
+        "action": "offer",
+        "x": 95000.0,
+        "d": 0.05,
+        "rationale": "We appreciate your prompt settlement proposal. To align with our cash management goals, we seek a higher discount of 5%, which translates to a payment of 95,000 TL now. This provides a stronger incentive for early payment while still delivering substantial funds promptly.",
+        "mode": "online",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.05,
+              "x": 100000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.04,
+              "x": 96000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.05,
+              "x": 95000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "d": 0.05,
+              "rationale": "We appreciate your prompt settlement proposal. To align with our cash management goals, we seek a higher discount of 5%, which translates to a payment of 95,000 TL now. This provides a stronger incentive for early payment while still delivering substantial funds promptly.",
+              "x": 95000
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "buyer private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "seller",
+        "round": 2,
+        "action": "offer",
+        "x": 62000.0,
+        "d": 0.023,
+        "rationale": "Proposed terms for this round.",
+        "mode": "online",
+        "fallback": true,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.05,
+              "x": 95000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.03,
+              "x": 97000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.025,
+              "x": 97500
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.02,
+              "x": 98000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "x": 62000.0,
+              "d": 0.023
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "x": 62000.0,
+              "d": 0.023,
+              "rationale": "Proposed terms for this round."
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "seller private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "buyer",
+        "round": 2,
+        "action": "offer",
+        "x": 62000.0,
+        "d": 0.027,
+        "rationale": "Proposed terms for this round.",
+        "mode": "online",
+        "fallback": true,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.023,
+              "x": 62000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.03,
+              "x": 62000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.05,
+              "x": 62000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.04,
+              "x": 60000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "x": 62000.0,
+              "d": 0.027
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "offer",
+              "x": 62000.0,
+              "d": 0.027,
+              "rationale": "Proposed terms for this round."
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "buyer private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      },
+      {
+        "side": "seller",
+        "round": 3,
+        "action": "accept",
+        "x": 62000.0,
+        "d": 0.027,
+        "rationale": "The proposed discount aligns with our cash flow preferences and meets our acceptable limits.",
+        "mode": "online",
+        "fallback": false,
+        "tool_calls": [
+          {
+            "tool": "evaluate_counter",
+            "args": {
+              "d": 0.027,
+              "x": 62000
+            },
+            "status": "ok"
+          },
+          {
+            "tool": "submit_offer",
+            "args": {
+              "action": "accept",
+              "d": 0.027,
+              "rationale": "The proposed discount aligns with our cash flow preferences and meets our acceptable limits.",
+              "x": 62000
+            },
+            "status": "ok"
+          }
+        ],
+        "blocked": [],
+        "checks": [
+          {
+            "check": "seller private limits (validate_offer)",
+            "ok": true
+          }
+        ]
+      }
+    ],
+    "evaluations": {
+      "supplier": 131,
+      "buyer": 76
+    },
+    "outcome": "NO_FEASIBLE_AGREEMENT",
+    "close_check": {
+      "supplier_feasible": true,
+      "buyer_feasible": true,
+      "nash_product": 400000.0,
+      "optimum_nash_product": 490000.0,
+      "within_tolerance": false
+    },
+    "bilno": {
+      "status": "AGREEMENT",
+      "recommendation": "early_payment",
+      "x": 62000.0,
+      "d": 0.025,
+      "pay_amount": 60450.0,
+      "supplier_gain_bucket": 7,
+      "buyer_gain_bucket": 7,
+      "nash_product": 490000.0,
+      "apr": 0.15598290598290598,
+      "supplier_evaluations": 130,
+      "buyer_evaluations": 75,
+      "feasible_points": 57
+    },
+    "bilno_trace": [
+      {
+        "x": 10000.0,
+        "d": 0.005,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.01,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.015,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.02,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.025,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.03,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 10000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 20000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 20000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 20000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 20000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 20000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 20000.0,
+        "d": 0.03,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 20000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 20000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 20000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 20000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 30000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 30000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 30000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 30000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 30000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 30000.0,
+        "d": 0.03,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 30000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 30000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 30000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 30000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 40000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 40000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 40000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 40000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 40000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 40000.0,
+        "d": 0.03,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 40000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 40000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 40000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 40000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 50000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 50000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 50000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 50000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 50000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 50000.0,
+        "d": 0.03,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 50000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 50000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 50000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 50000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 60000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 60000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 60000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 60000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 60000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 60000.0,
+        "d": 0.03,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 60000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 60000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 60000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 60000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 70000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 70000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 70000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 70000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 70000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 70000.0,
+        "d": 0.03,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 70000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 70000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 70000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 70000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 80000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 80000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 80000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 80000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 80000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 80000.0,
+        "d": 0.03,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 80000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 80000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 80000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 80000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 90000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 90000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 90000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 90000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 90000.0,
+        "d": 0.025,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 90000.0,
+        "d": 0.03,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 90000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 90000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 90000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 90000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 100000.0,
+        "d": 0.005,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 100000.0,
+        "d": 0.01,
+        "supplier_ok": true,
+        "both_ok": false
+      },
+      {
+        "x": 100000.0,
+        "d": 0.015,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 100000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 100000.0,
+        "d": 0.025,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 100000.0,
+        "d": 0.03,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 100000.0,
+        "d": 0.035,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 100000.0,
+        "d": 0.04,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 100000.0,
+        "d": 0.045,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 100000.0,
+        "d": 0.05,
+        "supplier_ok": false,
+        "both_ok": false
+      },
+      {
+        "x": 51000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 52000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 53000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 54000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 55000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 56000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 57000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 58000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 59000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 61000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 63000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 64000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 65000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 66000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 67000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 68000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 69000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.02,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.021,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.022,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.023,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.024,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.026,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.027,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.028,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.029,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 62000.0,
+        "d": 0.03,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 71000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      },
+      {
+        "x": 72000.0,
+        "d": 0.025,
+        "supplier_ok": true,
+        "both_ok": true
+      }
+    ],
+    "reason": "agreed terms failed the BILNO close check",
+    "recommendation": "bank_loan"
+  }
+}
