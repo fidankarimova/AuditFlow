@@ -14,6 +14,17 @@ contract InvoiceRegistryTest is BaseTest {
         assertEq(uint8(registry.statusOf(id)), uint8(InvoiceRegistry.Status.Confirmed));
     }
 
+    function test_MillisecondTimestampsLikeFiscoBcos() public {
+        // FISCO BCOS reports block.timestamp in milliseconds; due dates stay in seconds.
+        vm.warp(block.timestamp * 1000);
+        uint256 id = _register(FACE);
+        assertEq(uint8(registry.statusOf(id)), uint8(InvoiceRegistry.Status.Registered));
+        bytes32 h = _invoiceHash("PAST-1", FACE, uint64(block.timestamp / 1000 - 1));
+        vm.prank(supplier);
+        vm.expectRevert(InvoiceRegistry.InvalidInvoice.selector);
+        registry.registerInvoice(h, supplier, buyer, FACE, uint64(block.timestamp / 1000 - 1));
+    }
+
     function test_SellerRegistersDirectly() public {
         bytes32 h = _invoiceHash("SELF-1", FACE, dueDate);
         vm.prank(supplier);

@@ -35,12 +35,13 @@ from services.common.keys import key_for  # noqa: E402
 from services.common.llm import ScriptedBackend  # noqa: E402
 from services.coordinator.run_flow import SERVICES, start_stack, stop_stack  # noqa: E402
 from services.ledger import local_chain  # noqa: E402
-from services.ledger.client import EvmLedgerClient  # noqa: E402
+from services.ledger.client import EvmLedgerClient, get_ledger_client  # noqa: E402
 from services.supplier import agents as supplier_agents  # noqa: E402
 from services.supplier import data as supplier_data  # noqa: E402
 
 EVIDENCE = ROOT / "evidence"
 DOC = ROOT / "docs" / "EXECUTION_EVIDENCE.md"
+TAG = None
 
 
 class Recorder:
@@ -91,7 +92,13 @@ def _new_txs(deal: dict, before: int, label: str | None = None) -> list[dict]:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--ledger", choices=["anvil", "configured"], default="anvil")
+    ap.add_argument("--tag", help="write to evidence/<tag>/ and docs/EXECUTION_EVIDENCE_<TAG>.md (e.g. fisco)")
     args = ap.parse_args()
+    global EVIDENCE, DOC, TAG
+    TAG = args.tag
+    if args.tag:
+        EVIDENCE = ROOT / "evidence" / args.tag
+        DOC = ROOT / "docs" / f"EXECUTION_EVIDENCE_{args.tag.upper()}.md"
 
     started = datetime.now(timezone.utc)
     run_root = ROOT / "data" / "runs" / f"evidence-{started:%Y%m%d-%H%M%S}"
@@ -115,9 +122,9 @@ def main() -> int:
             ledger_label = f"local anvil chain (chain id {local_chain.CHAIN_ID}), NOT a public testnet"
         else:
             settings = get_settings()
-            if settings.ledger_target != "evm":
-                raise SystemExit("--ledger configured needs LEDGER_TARGET=evm in .env")
-            ledger = EvmLedgerClient(settings)
+            if settings.ledger_target not in ("evm", "fisco"):
+                raise SystemExit("--ledger configured needs LEDGER_TARGET=evm or fisco in .env")
+            ledger = get_ledger_client(settings)
             ledger_label = f"{ledger.network} (chain id {settings.chain_id})"
         os.environ["INVOICE_SERIES"] = series
 
@@ -331,7 +338,7 @@ def _typed(coord: httpx.Client, deal_id: str) -> dict:
 
 
 def _write_outputs(rec, rec_b, deal_a, deal_b, run_a, run_b, ledger_label, ledger, started, series) -> None:
-    EVIDENCE.mkdir(exist_ok=True)
+    EVIDENCE.mkdir(parents=True, exist_ok=True)
     shutil.copy(run_a / "audit_log.jsonl", EVIDENCE / "audit_log.jsonl")
     shutil.copy(run_a / "bank_sandbox_log.jsonl", EVIDENCE / "bank_sandbox_log.jsonl")
     shutil.copy(run_b / "audit_log.jsonl", EVIDENCE / "audit_log_no_deal.jsonl")
@@ -398,6 +405,8 @@ Final agreement: v{deal_a['agreement']['version']}, face {t['face_amount_x'] / 1
 Reverted attack transactions (`REVERTED`) were sent on purpose with a fixed gas limit, so that each revert is
 mined and has a tx hash. The reason shown was decoded from a dry run of the same call.
 """
+    if TAG:
+        doc = doc.replace("`evidence/", f"`evidence/{TAG}/")
     DOC.write_text(doc)
     print(f"\nWrote {DOC.relative_to(ROOT)} and evidence files.")
 

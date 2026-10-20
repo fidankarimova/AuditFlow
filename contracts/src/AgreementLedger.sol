@@ -6,6 +6,7 @@ import {Pausable} from "@openzeppelin/contracts/utils/Pausable.sol";
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import {InvoiceRegistry} from "./InvoiceRegistry.sol";
+import {ChainTime} from "./ChainTime.sol";
 
 /// @title AgreementLedger
 /// @notice Shared record of early-payment agreements so supplier, buyer and auditors can verify
@@ -120,7 +121,7 @@ contract AgreementLedger is AccessControl, Pausable, EIP712 {
         }
         if (
             a.faceAmount == 0 || a.faceAmount > inv.faceValue || a.discountBps >= BPS
-                || a.payAmount != (a.faceAmount * (BPS - a.discountBps)) / BPS || a.expiresAt <= block.timestamp
+                || a.payAmount != (a.faceAmount * (BPS - a.discountBps)) / BPS || a.expiresAt <= ChainTime.nowSeconds()
         ) revert InvalidTerms();
 
         bytes32 active = activeAgreementOf[a.invoiceId];
@@ -167,7 +168,7 @@ contract AgreementLedger is AccessControl, Pausable, EIP712 {
         Record storage r = _records[agreementHash];
         if (r.status != Status.Committed) revert InvalidStatus(agreementHash, r.status);
         if (!r.sellerApproved || !r.buyerApproved) revert MissingApprovals(r.sellerApproved, r.buyerApproved);
-        if (block.timestamp > r.expiresAt) revert AgreementExpired(agreementHash);
+        if (ChainTime.nowSeconds() > r.expiresAt) revert AgreementExpired(agreementHash);
         if (registry.statusOf(r.invoiceId) != InvoiceRegistry.Status.Confirmed) {
             revert InvoiceNotConfirmed(r.invoiceId);
         }
@@ -209,7 +210,7 @@ contract AgreementLedger is AccessControl, Pausable, EIP712 {
     function approve(bytes32 agreementHash, bytes calldata signature) external whenNotPaused {
         Record storage r = _records[agreementHash];
         if (r.status != Status.Committed) revert InvalidStatus(agreementHash, r.status);
-        if (block.timestamp > r.expiresAt) revert AgreementExpired(agreementHash);
+        if (ChainTime.nowSeconds() > r.expiresAt) revert AgreementExpired(agreementHash);
 
         (address signer, ECDSA.RecoverError err,) = ECDSA.tryRecover(agreementHash, signature);
         if (err != ECDSA.RecoverError.NoError) revert InvalidSigner(address(0));

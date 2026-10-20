@@ -4,6 +4,7 @@ pragma solidity ^0.8.24;
 import {AccessControl} from "@openzeppelin/contracts/access/AccessControl.sol";
 import {EIP712} from "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
 import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {ChainTime} from "./ChainTime.sol";
 
 /// @title InvoiceRegistry
 /// @notice Registers invoices by hash (a hash can be used only once) and records the buyer's
@@ -86,7 +87,7 @@ contract InvoiceRegistry is AccessControl, EIP712 {
         if (!isSeller && !isRegistrar) revert NotAuthorizedToRegister();
         if (
             invoiceHash == bytes32(0) || seller == address(0) || buyer == address(0) || buyer == seller
-                || faceValue == 0 || dueDate <= block.timestamp
+                || faceValue == 0 || dueDate <= ChainTime.nowSeconds()
         ) revert InvalidInvoice();
         if (hashUsed[invoiceHash]) revert DuplicateInvoice(invoiceHash);
 

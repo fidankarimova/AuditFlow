@@ -223,8 +223,9 @@ stateDiagram-v2
   exact terms were committed, who approved which hash, and that settlement happened once. On the ledger these facts
   are checked by contract rules that the coordinator cannot bypass (e.g. no submission without both approvals,
   enforced on-chain). Each party can verify them without trusting the coordinator's database.
-- **Targets.** Base Sepolia (deployed: `deployments/base-sepolia.json`) (execution evidence) and local anvil (tests, `make flow`).
-  FISCO BCOS is **not implemented** (`docs/LEDGER.md`).
+- **Targets.** Base Sepolia (deployed: `deployments/base-sepolia.json`; execution evidence), **FISCO BCOS 3.17.1**
+  (local 4-node PBFT chain through its Web3-compatible RPC; `deployments/fisco-local.json`; execution evidence in
+  `docs/EXECUTION_EVIDENCE_FISCO.md`) and local anvil (tests, `make flow`). See `docs/LEDGER.md`.
 
 ## 10. Experiments (summary of `docs/EXPERIMENTS.md`)
 
@@ -255,7 +256,7 @@ The setup:
 | Gap | Status |
 |---|---|
 | Online LLM mode | Implemented; the SDK request/response path is tested with a mocked transport (`test_online_backend_request_shape_and_turn`). It was not run against the live API in this repository |
-| FISCO BCOS | Not implemented (stub raises) |
+| FISCO BCOS | Runs on a **local** 4-node chain on one machine (all nodes run by us), via the Web3 RPC, not FISCO's native SDK. Not a multi-organization deployment |
 | Zero-knowledge proofs | None. Privacy is a trusted server-side policy service |
 | BILNO safety margin and partial relief | Not implemented (see §10) |
 | Partial early payment accounting (ERP, credit notes, tax) | Not built; the supplier's receivable status is not updated after settlement |

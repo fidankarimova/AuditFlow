@@ -11,5 +11,9 @@ remappings = [
     "forge-std/=lib/forge-std/src/",
 ]
 
+# FISCO BCOS 3.x local chain (Web3 RPC on node0): pre-Shanghai opcodes to be safe
+[profile.fisco]
+evm_version = "paris"
+
 [rpc_endpoints]
 base_sepolia = "${RPC_URL}"

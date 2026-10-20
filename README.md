@@ -91,7 +91,7 @@ python -m experiments.run   # experiments vs baselines -> docs/EXPERIMENTS.md
 |---|---|
 | **Base Sepolia** (EVM testnet, chain 84532) | Deployed by `contracts/script/Deploy.s.sol`. `InvoiceRegistry` `0xbcc371e3dfa3dc96e086bf46a673fd5abac873e4`, `AgreementLedger` `0xad29ca179ca4aef902e461d556e1872d7300546d` (`deployments/base-sepolia.json`). The committed execution evidence (`docs/EXECUTION_EVIDENCE.md`) is a Base Sepolia run with Basescan links |
 | **Local anvil** (chain 31337) | Used by the tests and `make flow`. It is a local test chain, **not** a public testnet |
-| FISCO BCOS 3.x | **Not implemented** (interface stub only). See `docs/LEDGER.md` |
+| **FISCO BCOS 3.17.1** (local 4-node PBFT chain, chain 20200) | Works through FISCO's Web3-compatible RPC: `make fisco-up`, `make deploy-fisco`, `make demo-fisco`. `InvoiceRegistry` `0x002a06c205559539d4dabcd0014d0b7f570071bc`, `AgreementLedger` `0x665b3a78b2f86953f4c6509799b81eefa6a4fa41` (`deployments/fisco-local.json`). Evidence: `docs/EXECUTION_EVIDENCE_FISCO.md`. All 4 nodes run on one machine; this is not a multi-organization consortium |
 
 ## Repository
 
@@ -102,7 +102,7 @@ python -m experiments.run   # experiments vs baselines -> docs/EXPERIMENTS.md
 | `services/supplier/`, `services/buyer/` | company workspaces: own SQLite DB, private policy, agents, FastAPI |
 | `services/coordinator/` | negotiation, BILNO runner, Compliance Agent, transaction state machine, bank client, webhooks, `run_flow` |
 | `services/bank_sandbox/` | simulated bank (own DB, idempotency, signed webhooks, failure injection) |
-| `services/ledger/` | ledger client (EVM / disabled / FISCO stub), local anvil helper, ABIs |
+| `services/ledger/` | ledger client (EVM / FISCO BCOS via Web3 RPC / disabled), local anvil helper, ABIs |
 | `services/common/` | config, EIP-712, LLM tool layer, negotiator, audit log, keys, rate limits |
 | `ui/` | Streamlit app (7 screens) |
 | `experiments/` | synthetic scenarios, baselines, evaluation |
@@ -130,7 +130,7 @@ python -m experiments.run   # experiments vs baselines -> docs/EXPERIMENTS.md
 | 3. Demo video | separate, ≤ 5 min |
 | 4. Source code | this repository: README + tests ([evidence/test_results.txt](evidence/test_results.txt)) |
 | 5. Security self-assessment | [docs/SECURITY_SELF_ASSESSMENT.md](docs/SECURITY_SELF_ASSESSMENT.md) |
-| 6. Execution evidence | [docs/EXECUTION_EVIDENCE.md](docs/EXECUTION_EVIDENCE.md) + [evidence/](evidence/) (bank sandbox logs, audit logs, ledger tx hashes, UI screenshots) |
+| 6. Execution evidence | [docs/EXECUTION_EVIDENCE.md](docs/EXECUTION_EVIDENCE.md) (Base Sepolia) + [docs/EXECUTION_EVIDENCE_FISCO.md](docs/EXECUTION_EVIDENCE_FISCO.md) (FISCO BCOS) + [evidence/](evidence/) (bank sandbox logs, audit logs, ledger tx hashes, UI screenshots) |
 
 ## Team
 

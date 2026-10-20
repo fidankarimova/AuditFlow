@@ -2,7 +2,7 @@ SHELL := /bin/bash
 FORGE ?= forge
 PYTHON ?= .venv/bin/python
 
-.PHONY: install build test test-contracts test-py coverage deploy deploy-local ping up bank coordinator supplier buyer flow audit-verify demo ui
+.PHONY: install build test test-contracts test-py coverage deploy deploy-local ping fisco-up fisco-stop deploy-fisco ping-fisco up-fisco demo-fisco up bank coordinator supplier buyer flow audit-verify demo ui
 
 # First Python >= 3.11 on PATH (override with `make install PY=/path/to/python3.12`)
 PY ?= $(shell for p in python3.13 python3.12 python3.11 python3; do command -v $$p >/dev/null 2>&1 && $$p -c 'import sys; sys.exit(sys.version_info < (3, 11))' 2>/dev/null && echo $$p && break; done)
@@ -39,6 +39,28 @@ deploy-local:
 
 ping:
 	$(PYTHON) -m services.ledger.client ping
+
+# FISCO BCOS 3.x: local 4-node PBFT chain, Web3 RPC on node0 (127.0.0.1:8545, chain id 20200). No gas fees.
+FISCO_ENV := LEDGER_TARGET=fisco RPC_URL=http://127.0.0.1:8545 CHAIN_ID=20200
+fisco-up:
+	scripts/fisco_chain.sh up
+
+fisco-stop:
+	scripts/fisco_chain.sh stop
+
+deploy-fisco:
+	set -a && source .env && set +a && cd contracts && FOUNDRY_PROFILE=fisco FUND_GAS=false $(FORGE) script script/Deploy.s.sol --rpc-url http://127.0.0.1:8545 --broadcast --legacy --with-gas-price 0 --slow
+	$(PYTHON) scripts/export_deployment.py 20200 fisco-local
+
+ping-fisco:
+	$(FISCO_ENV) $(PYTHON) -m services.ledger.client ping
+
+up-fisco:
+	$(FISCO_ENV) $(PYTHON) scripts/stack.py --ledger configured
+
+# End-to-end evidence on FISCO BCOS -> docs/EXECUTION_EVIDENCE_FISCO.md + evidence/fisco/
+demo-fisco:
+	$(FISCO_ENV) $(PYTHON) scripts/run_demo_scenario.py --ledger configured --tag fisco
 
 UVICORN ?= .venv/bin/uvicorn
 

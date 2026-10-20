@@ -1,0 +1,42 @@
+{
+  "network": "fisco-local",
+  "chain_id": 20200,
+  "contracts": {
+    "InvoiceRegistry": {
+      "address": "0x002a06c205559539d4dabcd0014d0b7f570071bc",
+      "tx_hash": "0x43752aeb8666944a0fde2644b6bc1472a09cccd19003ae5b89be79e6ec24028f",
+      "block": 7
+    },
+    "AgreementLedger": {
+      "address": "0x665b3a78b2f86953f4c6509799b81eefa6a4fa41",
+      "tx_hash": "0x55ceef279a92da749f71d0fefed88fdd2c4a188f50e58a954c494699a783e7fb",
+      "block": 8
+    }
+  },
+  "setup_transactions": [
+    {
+      "function": "grantRole(bytes32,address)",
+      "to": "0x002a06c205559539d4dabcd0014d0b7f570071bc",
+      "tx_hash": "0xa004ebab99f1dde8a1755097fbe8da26fc9f439719c7300e14b8e33c970f7ede",
+      "block": 9
+    },
+    {
+      "function": "grantRole(bytes32,address)",
+      "to": "0x002a06c205559539d4dabcd0014d0b7f570071bc",
+      "tx_hash": "0x4da675254a27ad8cc90ce17f2cfb0df8b87c3fd22719d2aedde02d80fdcccb11",
+      "block": 10
+    },
+    {
+      "function": "grantRole(bytes32,address)",
+      "to": "0x665b3a78b2f86953f4c6509799b81eefa6a4fa41",
+      "tx_hash": "0xc017f119cfdf534c7ca868bd3184fba56b45858265edcd0c12eeb32309e84c12",
+      "block": 11
+    },
+    {
+      "function": "setAuthorizedRegistrar(address,bool)",
+      "to": "0x002a06c205559539d4dabcd0014d0b7f570071bc",
+      "tx_hash": "0x2faafcd2e14aa99b3a11d17ec30c686ccc873483e6fae52044a8dc22ad861151",
+      "block": 12
+    }
+  ]
+}

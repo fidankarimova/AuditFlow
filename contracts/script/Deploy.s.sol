@@ -25,8 +25,11 @@ contract Deploy is Script {
         registry.grantRole(registry.SETTLER_ROLE(), address(ledger));
         registry.grantRole(registry.REGISTRAR_ROLE(), coordinator);
         ledger.grantRole(ledger.COORDINATOR_ROLE(), coordinator);
-        if (coordinator.balance < COORDINATOR_GAS) payable(coordinator).transfer(COORDINATOR_GAS);
-        if (supplier.balance < SUPPLIER_GAS) payable(supplier).transfer(SUPPLIER_GAS);
+        // FISCO BCOS has no gas fees, so there is nothing to forward there (FUND_GAS=false).
+        if (vm.envOr("FUND_GAS", true)) {
+            if (coordinator.balance < COORDINATOR_GAS) payable(coordinator).transfer(COORDINATOR_GAS);
+            if (supplier.balance < SUPPLIER_GAS) payable(supplier).transfer(SUPPLIER_GAS);
+        }
         vm.stopBroadcast();
 
         // Supplier (seller) authorizes the coordinator to register its invoices.

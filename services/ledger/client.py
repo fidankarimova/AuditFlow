@@ -1,7 +1,7 @@
 """Ledger client: one interface, two backends selected by LEDGER_TARGET.
 
 - evm: Base Sepolia, or a local anvil chain for rehearsals/tests (implemented).
-- fisco: FISCO BCOS 3.x (interface only; not implemented, see docs/LEDGER.md).
+- fisco: FISCO BCOS 3.x through its Web3-compatible RPC (local 4-node chain, see docs/LEDGER.md).
 - none: ledger explicitly disabled; writes return tx_hash None (offline tests).
 
 CLI: python -m services.ledger.client ping
@@ -18,7 +18,7 @@ from pathlib import Path
 from services.common.config import REPO_ROOT, Settings, get_settings
 
 ABI_DIR = Path(__file__).parent / "abi"
-EVM_NETWORKS = {84532: "base-sepolia", 31337: "anvil"}
+EVM_NETWORKS = {84532: "base-sepolia", 31337: "anvil", 20200: "fisco-local"}
 
 
 class LedgerError(Exception):
@@ -313,13 +313,31 @@ class NoLedger(LedgerClient):
         return {}
 
 
-class FiscoLedgerClient(LedgerClient):
-    """Placeholder for FISCO BCOS 3.x. Deliberately not implemented: we deploy to Base Sepolia."""
+class FiscoLedgerClient(EvmLedgerClient):
+    """FISCO BCOS 3.x through its Web3-compatible JSON-RPC ([web3_rpc] in the node's config.ini, chain id 20200).
+    Same Solidity contracts (compiled with the `fisco` Foundry profile), same ABI and EIP-712 domains. FISCO has no
+    gas fees, so transactions are legacy with gas price 0. Deployment: deployments/fisco-local.json."""
 
     target = "fisco"
 
-    def __new__(cls, *args, **kwargs):
-        raise NotImplementedError("FISCO BCOS backend is not implemented; use LEDGER_TARGET=evm")
+    def _send(self, name: str, fn) -> dict:
+        return super()._send(name, _ZeroGas(fn))
+
+    def send_expecting_revert(self, name: str, fn, gas: int = 500_000) -> dict:
+        return super().send_expecting_revert(name, _ZeroGas(fn), gas)
+
+
+class _ZeroGas:
+    """Wraps a contract function so its transactions are legacy with gasPrice 0 (FISCO BCOS)."""
+
+    def __init__(self, fn):
+        self._fn = fn
+
+    def build_transaction(self, tx: dict) -> dict:
+        return self._fn.build_transaction({**tx, "gasPrice": 0})
+
+    def __getattr__(self, item):
+        return getattr(self._fn, item)
 
 
 def get_ledger_client(settings: Settings | None = None) -> LedgerClient:
