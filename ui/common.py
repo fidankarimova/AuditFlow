@@ -155,12 +155,11 @@ def before_after_chart(before: dict, after: dict, reserve: float, height: int = 
         for day, (lo, mid, hi) in enumerate(zip(b["p5"], b["p50"], b["p95"])):
             rows.append({"day": day, "scenario": label, "p5": lo, "p50": mid, "p95": hi})
     df = pd.DataFrame(rows)
-    color = alt.Color("scenario:N", scale=alt.Scale(domain=["Before action", "After action"],
-                                                    range=[SERIES_1, SERIES_2]),
-                      legend=alt.Legend(title=None, orient="top"))
+    scale = alt.Scale(domain=["Before action", "After action"], range=[SERIES_1, SERIES_2])
+    color = alt.Color("scenario:N", scale=scale, legend=alt.Legend(title=None, orient="top"))
     band = alt.Chart(df).mark_area(opacity=0.10).encode(
         x=_axis_x(), y=alt.Y("p5:Q", title="Cash (TL)", axis=alt.Axis(format=",.0f", gridColor=GRID)),
-        y2="p95:Q", color=alt.Color("scenario:N", scale=color.scale, legend=None))
+        y2="p95:Q", color=alt.Color("scenario:N", scale=scale, legend=None))
     lines = alt.Chart(df).mark_line(strokeWidth=2).encode(x="day:Q", y="p50:Q", color=color)
     wide = df.pivot(index="day", columns="scenario", values="p50").reset_index()
     hover = alt.selection_point(fields=["day"], nearest=True, on="pointermove", empty=False)

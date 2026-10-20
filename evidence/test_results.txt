@@ -1,4 +1,4 @@
-# Test run: 2026-10-20 13:28 UTC, after adding the OpenAI-compatible (Groq) LLM provider
+# Test run: 2026-10-20 14:27 UTC, after the Stress Lab chart fix (+ UI tests against live services)
 # Command: make test   (= cd contracts && forge test -vv ; .venv/bin/python -m pytest -q)
 # forge Version: 1.8.5, Python 3.12.3
 
@@ -19,7 +19,7 @@ Ran 14 tests for test/InvoiceRegistry.t.sol:InvoiceRegistryTest
 [PASS] test_RevertWhen_SettleUnconfirmed() (gas: 239632)
 [PASS] test_RevertWhen_UnauthorizedRegistration() (gas: 178248)
 [PASS] test_SellerRegistersDirectly() (gas: 205921)
-Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 3.84ms (3.85ms CPU time)
+Suite result: ok. 14 passed; 0 failed; 0 skipped; finished in 2.18ms (2.35ms CPU time)
 
 Ran 25 tests for test/AgreementLedger.t.sol:AgreementLedgerTest
 [PASS] test_AgreementHashMatchesOffChainEIP712() (gas: 277979)
@@ -47,8 +47,9 @@ Ran 25 tests for test/AgreementLedger.t.sol:AgreementLedgerTest
 [PASS] test_RevertWhen_SupersedeAfterSubmission() (gas: 621245)
 [PASS] test_RevertWhen_VersionNotIncreasing() (gas: 558461)
 [PASS] test_SettlementStillRecordedWhilePaused() (gas: 725957)
-Suite result: ok. 25 passed; 0 failed; 0 skipped; finished in 4.05ms (29.23ms CPU time)
+Suite result: ok. 25 passed; 0 failed; 0 skipped; finished in 2.85ms (13.04ms CPU time)
 
-Ran 2 test suites in 6.99ms (7.90ms CPU time): 39 tests passed, 0 failed, 0 skipped (39 total tests)
-..................................................................       [100%]
-66 passed in 64.68s (0:01:04)
+Ran 2 test suites in 7.37ms (5.03ms CPU time): 39 tests passed, 0 failed, 0 skipped (39 total tests)
+........................................................................ [ 97%]
+..                                                                       [100%]
+74 passed in 66.99s (0:01:06)
