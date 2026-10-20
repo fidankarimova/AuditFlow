@@ -7,6 +7,7 @@ Fresh databases and logs per run under data/runs/<ts>/.
 """
 
 import argparse
+import os
 import signal
 import sys
 import time
@@ -31,6 +32,9 @@ if __name__ == "__main__":
     args = ap.parse_args()
     signal.signal(signal.SIGTERM, _on_sigterm)  # `kill` stops the child services too, like Ctrl-C
     run_dir = ROOT / "data" / "runs" / f"stack-{datetime.now():%Y%m%d-%H%M%S}"
+    if args.ledger == "configured" and "INVOICE_SERIES" not in os.environ:
+        # a persistent chain remembers invoice hashes: give every restart fresh invoice numbers
+        os.environ["INVOICE_SERIES"] = f"D{datetime.now():%m%d%H%M%S}"
     procs, url, env = start_stack(args.ledger, run_dir, PORTS, offline=not args.online)
     print(f"Ledger: {env.get('LEDGER_TARGET', 'from .env')}  LLM_MODE: {env.get('LLM_MODE', 'from .env')}")
     for name, u in url.items():
