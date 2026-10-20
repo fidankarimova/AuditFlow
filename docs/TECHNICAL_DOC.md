@@ -216,7 +216,7 @@ stateDiagram-v2
   - `recordSettlement`: only after submission; marks the invoice Settled.
   - Also `recordFailure`, `supersede`, `pause` and events.
   - **AI agents hold no key.**
-  - 38 Foundry tests cover the happy path and every revert listed in the plan (`contracts/test/`).
+  - 39 Foundry tests cover the happy path and every revert listed in the plan (`contracts/test/`).
 - **Why a shared ledger instead of only the hash-chained log?** The audit log proves integrity only to whoever
   trusts the operator: the coordinator could rewrite the whole chain. Supplier, buyer (and later bank or
   auditor) are separate organizations that need to verify **the same** facts independently. That means which
@@ -255,7 +255,7 @@ The setup:
 
 | Gap | Status |
 |---|---|
-| Online LLM mode | Implemented; the SDK request/response path is tested with a mocked transport (`test_online_backend_request_shape_and_turn`). It was not run against the live API in this repository |
+| Online LLM mode | Implemented; the SDK request/response path is tested with a mocked transport (`test_online_backend_request_shape_and_turn`). `scripts/run_online_negotiation.py` runs one live negotiation, but it was **not run**: the team has no paid Anthropic API key. All evidence is from `LLM_MODE=offline` |
 | FISCO BCOS | Runs on a **local** 4-node chain on one machine (all nodes run by us), via the Web3 RPC, not FISCO's native SDK. Not a multi-organization deployment |
 | Zero-knowledge proofs | None. Privacy is a trusted server-side policy service |
 | BILNO safety margin and partial relief | Not implemented (see §10) |

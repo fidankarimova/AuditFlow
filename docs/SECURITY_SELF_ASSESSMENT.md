@@ -46,16 +46,18 @@ The trust boundaries are:
 
 ## 4. Security test results (S1–S10)
 
-These results are from the run of `pytest -v -k "S1 or … or tamper"` used for this document: **19 passed, 0 failed**.
-The S2, S6, S7 and S8 attacks were also executed against the running services in `docs/EXECUTION_EVIDENCE.md`,
-with tx hashes and log line numbers.
+These results are from `pytest -q -k "S1 or S2 or S3 or S4 or S5 or S6 or S7 or S8 or S9 or S10 or unlisted or
+both_approvals or tamper"`: **13 passed, 0 failed** (the 13 tests in the table). The full suite is in
+`evidence/test_results.txt`. The S2, S3/S5, S4, S6, S7 and S8 attacks were also executed against the running services
+on Base Sepolia (`docs/EXECUTION_EVIDENCE.md`, with tx hashes, Basescan links and log line numbers) and on FISCO BCOS
+(`docs/EXECUTION_EVIDENCE_FISCO.md`).
 
 | ID | Test | What it shows | Result |
 |---|---|---|---|
 | S1 | `test_S1_forged_invoice_not_verified` | Unconfirmed / non-onboarded-buyer invoice, disputed invoice, and an invoice "confirmed" with the wrong key are all refused; the buyer workspace rejects an invoice it does not owe | PASS |
 | S2 | `test_S2_duplicate_invoice_rejected` | Second intake of the same invoice → HTTP 409; on-chain `registerInvoice` with the same hash reverts `DuplicateInvoice` (local anvil) | PASS |
 | S3 | `test_S3_prompt_injection_in_memo_ignored` | Memo reaches the model only as `<untrusted>`; a model that obeys it (10% discount) is blocked twice by code; final offer ≤ `d_max_S` (3%) | PASS |
-| S4 | `test_S4_buyer_agent_over_limit_blocked` | Buyer model offers/accepts terms above `max_early_cash` → blocked (`max_early_cash`) | PASS |
+| S4 | `test_S4_buyer_agent_over_limit_blocked` | Buyer model offers/accepts terms above `max_early_cash` → blocked (`max_early_cash`). In the Base Sepolia run, a scripted buyer model accepting x=100,000 against a 440,000 reserve is blocked by `reserve_risk_limit` (off-chain) | PASS |
 | S5 | `test_S5_seller_agent_over_discount_blocked` | Seller model offers 4% > `d_max_S` → blocked (`max_discount`) | PASS |
 | S6 | `test_S6_changed_amount_invalidates_approval` | Amend after approval → v2 with new hash and new idempotency key; the genuine v1 signature is rejected for v2; payment impossible | PASS |
 | S7 | `test_S7_duplicate_bank_request_single_payment` | Same Idempotency-Key ×3 → same payment, one debit; same key + different body → 409 | PASS |
@@ -68,7 +70,7 @@ with tx hashes and log line numbers.
 
 Further related tests (also passing): `test_coordinator_fails_closed_without_secret`,
 `test_bank_refuses_to_start_without_webhook_secret`, `test_polling_alone_never_settles`,
-`test_expired_agreement_cannot_be_approved`, `test_illegal_transitions_raise`, and 38 Foundry tests.
+`test_expired_agreement_cannot_be_approved`, `test_illegal_transitions_raise`, and 39 Foundry tests.
 
 ## 5. Known risks
 
