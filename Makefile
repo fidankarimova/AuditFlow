@@ -1,5 +1,5 @@
 SHELL := /bin/bash
-FORGE ?= forge
+FORGE ?= $(shell command -v forge 2>/dev/null || echo $(HOME)/.foundry/bin/forge)
 PYTHON ?= .venv/bin/python
 
 .PHONY: install build test test-contracts test-py coverage deploy deploy-local ping fisco-up fisco-stop deploy-fisco ping-fisco up-fisco demo-fisco up bank coordinator supplier buyer flow audit-verify demo ui
