@@ -13,7 +13,9 @@ with st.expander("Start a new deal: verify an invoice", expanded=deal is None):
                            f"{'' if r['eligible'] else ' (excluded: ' + '; '.join(r['reasons']) + ')'}"
               for r in receivables}
     if numbers:
-        chosen = st.selectbox("Invoice", numbers, format_func=labels.get)
+        # Default to the demo invoice (onboarded buyer Beta Markets); other invoices stay selectable for attack demos
+        default = next((i for i, r in enumerate(receivables) if r["customer"] == "Beta Markets" and r["eligible"]), 0)
+        chosen = st.selectbox("Invoice", numbers, index=default, format_func=labels.get)
         st.caption("The coordinator runs compliance checks and asks the buyer workspace whether it owes this "
                    "invoice. The buyer's authorized human then confirms it with an EIP-712 signature (demo key). "
                    "Forged, disputed or duplicate invoices are refused here.")
