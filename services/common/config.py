@@ -22,8 +22,13 @@ class Settings(BaseSettings):
     supplier_signer_key: str = ""
     buyer_signer_key: str = ""
 
-    # Bank sandbox
+    # Bank sandbox (simulated bank, separate service)
     bank_webhook_secret: str = ""
+    bank_url: str = "http://127.0.0.1:8300"
+    bank_webhook_url: str = "http://127.0.0.1:8200/webhooks/bank"  # coordinator endpoint
+    bank_step_seconds: float = 2.0  # delay between INITIATED -> ACCEPTED -> SETTLED
+    bank_fail_rate: float = 0.0  # probability of an injected 503
+    bank_admin_token: str = ""  # optional guard for /admin/* failure injection
 
     # LLM
     anthropic_api_key: str = ""

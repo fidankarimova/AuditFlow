@@ -2,7 +2,7 @@ SHELL := /bin/bash
 FORGE ?= forge
 PYTHON ?= .venv/bin/python
 
-.PHONY: install build test test-contracts test-py coverage deploy deploy-local ping up demo ui
+.PHONY: install build test test-contracts test-py coverage deploy deploy-local ping up bank coordinator supplier buyer demo ui
 
 install:
 	python3 -m venv .venv
@@ -36,8 +36,29 @@ deploy-local:
 ping:
 	$(PYTHON) -m services.ledger.client ping
 
+UVICORN ?= .venv/bin/uvicorn
+
+supplier:
+	$(UVICORN) services.supplier.app:app --port 8101
+
+buyer:
+	$(UVICORN) services.buyer.app:app --port 8102
+
+coordinator:
+	$(UVICORN) services.coordinator.app:create_app --factory --port 8200
+
+bank:
+	$(UVICORN) services.bank_sandbox.app:create_app --factory --port 8300
+
+# All four services; Ctrl-C (or killing make) stops them all
 up:
-	@echo "TODO (Phases 4-7): start workspaces, coordinator and bank sandbox"
+	pids=""; \
+	for app in "services.supplier.app:app --port 8101" "services.buyer.app:app --port 8102" \
+	           "services.coordinator.app:create_app --factory --port 8200" \
+	           "services.bank_sandbox.app:create_app --factory --port 8300"; do \
+	  $(UVICORN) $$app & pids="$$pids $$!"; \
+	done; \
+	trap "kill $$pids 2>/dev/null" EXIT INT TERM; wait
 
 demo:
 	@echo "TODO (Phase 9): $(PYTHON) scripts/run_demo_scenario.py"
