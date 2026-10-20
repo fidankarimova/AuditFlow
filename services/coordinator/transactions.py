@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS invoices (
 );
 CREATE TABLE IF NOT EXISTS deals (
     deal_id TEXT PRIMARY KEY, invoice_hash TEXT UNIQUE, invoice_number TEXT, state TEXT,
-    negotiation TEXT, payment_id TEXT, created_at TEXT, updated_at TEXT
+    negotiation TEXT, payment_id TEXT, created_at TEXT, updated_at TEXT, compliance TEXT
 );
 CREATE TABLE IF NOT EXISTS agreements (
     deal_id TEXT, version INTEGER, agreement TEXT, agreement_hash TEXT UNIQUE,
@@ -97,6 +97,10 @@ class Coordinator:
         self.settings = settings or get_settings()
         self.clock = clock
         conn.executescript(SCHEMA)
+        try:  # DBs created before the compliance column existed
+            conn.execute("ALTER TABLE deals ADD COLUMN compliance TEXT")
+        except sqlite3.OperationalError:
+            pass
         self.registry_domain, self.ledger_domain = self._domains()
 
     def _domains(self):
@@ -170,6 +174,12 @@ class Coordinator:
             self._transition(deal_id, EXPIRED, "coordinator", "agreement expired before execution")
             raise CoordinatorError(409, "agreement expired")
 
+    def _store_compliance(self, deal_id: str, subject: str, checks: dict) -> None:
+        cur = json.loads(self._deal_row(deal_id)["compliance"] or "[]")
+        cur.append({"subject": subject, **checks})
+        self.conn.execute("UPDATE deals SET compliance = ? WHERE deal_id = ?", (json.dumps(cur), deal_id))
+        self.conn.commit()
+
     # ------------------------------------------------------------------ 1. invoice intake (-> VERIFIED)
 
     def confirmation_typed_data(self, ledger_invoice_id: int, invoice_hash: str, doc: dict) -> dict:
@@ -222,8 +232,9 @@ class Coordinator:
         conf = self._ledger(None, "confirmByBuyerWithSig", self.ledger.confirm_invoice_with_sig, ledger_id, sig)
         self.conn.execute("UPDATE invoices SET status = 'confirmed' WHERE invoice_hash = ?", (inv_hash,))
         deal_id = f"D-{uuid.uuid4().hex[:10]}"
-        self.conn.execute("INSERT INTO deals VALUES (?,?,?,?,?,?,?,?)",
-                          (deal_id, inv_hash, doc["number"], VERIFIED, None, None, _now_iso(), _now_iso()))
+        self.conn.execute("INSERT INTO deals VALUES (?,?,?,?,?,?,?,?,?)",
+                          (deal_id, inv_hash, doc["number"], VERIFIED, None, None, _now_iso(), _now_iso(),
+                           json.dumps([{"subject": "invoice", **checks}])))
         self.conn.execute("INSERT INTO deal_history (deal_id, ts, from_state, to_state, actor, note, ledger_tx) "
                           "VALUES (?,?,?,?,?,?,?)", (deal_id, _now_iso(), None, VERIFIED, "coordinator",
                                                     "buyer confirmation signature verified", conf.get("tx_hash")))
@@ -276,6 +287,7 @@ class Coordinator:
         doc = self._invoice(self._deal_row(deal_id)["invoice_hash"])["doc"]
         checks = compliance.compliance_agent(self.audit).call(
             "check_agreement", {"agreement": agreement, "doc": doc, "now_ts": int(self.clock())})
+        self._store_compliance(deal_id, f"agreement v{agreement['version']}", checks)
         if not checks["ok"]:
             raise CoordinatorError(422, "agreement failed compliance checks", checks)
         a_hash = eip712.agreement_hash(self.ledger_domain, agreement)
@@ -455,6 +467,7 @@ class Coordinator:
             "payment": self.tracker.get(deal["payment_id"]) if deal["payment_id"] else None,
             "agreement": next((v for v in versions if v["active"]), None), "versions": versions,
             "negotiation": json.loads(deal["negotiation"]) if deal["negotiation"] else None,
+            "compliance": json.loads(deal["compliance"]) if deal["compliance"] else [],
             "history": [dict(r) for r in self.conn.execute(
                 "SELECT ts, from_state, to_state, actor, note, ledger_tx FROM deal_history WHERE deal_id = ? "
                 "ORDER BY seq", (deal_id,))],

@@ -83,10 +83,25 @@ def forecast(scenario: str = "normal", bands: bool = False):
 
 
 @app.get("/forecast/what-if")
-def what_if(inflow_today: float, scenario: str = "normal"):
-    """Before / After view for a hypothetical inflow today (e.g. an early payment)."""
+def what_if(inflow_today: float, scenario: str = "normal", invoice_number: str | None = None,
+            face_paid_early: float = 0.0, bands: bool = False):
+    """Before / After view for an inflow today (e.g. an early payment of `face_paid_early` of an invoice, which
+    then no longer arrives at its due date)."""
+    if scenario not in SCENARIOS:
+        raise HTTPException(400, f"scenario must be one of {list(SCENARIOS)}")
     profile = data.load_profile(conn)
-    return compare(simulate(profile, scenario), simulate(profile.with_flow(0, inflow_today), scenario))
+    after_profile = profile.with_flow(0, inflow_today)
+    if invoice_number and face_paid_early:
+        inv = next((r for r in data.eligible_invoices(conn) if r["number"] == invoice_number), None)
+        if inv is None:
+            raise HTTPException(404, "not an eligible invoice")
+        after_profile = after_profile.with_receivable_amount(invoice_number, inv["face"] - face_paid_early)
+    before, after = simulate(profile, scenario), simulate(after_profile, scenario)
+    out = compare(before, after)
+    if bands:
+        out |= {"before": {"p5": before.p5, "p50": before.p50, "p95": before.p95},
+                "after": {"p5": after.p5, "p50": after.p50, "p95": after.p95}, "reserve": before.reserve}
+    return out
 
 
 @app.get("/negotiation-summary/{invoice_number}")

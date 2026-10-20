@@ -50,15 +50,11 @@ coordinator:
 bank:
 	$(UVICORN) services.bank_sandbox.app:create_app --factory --port 8300
 
-# All four services; Ctrl-C (or killing make) stops them all
+# All four services on fixed ports (+ local anvil chain if Foundry is installed). Ctrl-C stops them.
+# LEDGER=configured uses LEDGER_TARGET/RPC_URL/keys from .env (e.g. Base Sepolia).
+LEDGER ?= auto
 up:
-	pids=""; \
-	for app in "services.supplier.app:app --port 8101" "services.buyer.app:app --port 8102" \
-	           "services.coordinator.app:create_app --factory --port 8200" \
-	           "services.bank_sandbox.app:create_app --factory --port 8300"; do \
-	  $(UVICORN) $$app & pids="$$pids $$!"; \
-	done; \
-	trap "kill $$pids 2>/dev/null" EXIT INT TERM; wait
+	$(PYTHON) scripts/stack.py --ledger $(LEDGER)
 
 # Full flow over real services (local anvil chain if Foundry is installed, otherwise ledger disabled)
 flow:
@@ -71,4 +67,4 @@ demo:
 	@echo "TODO (Phase 9): $(PYTHON) scripts/run_demo_scenario.py"
 
 ui:
-	@echo "TODO (Phase 8): $(PYTHON) -m streamlit run ui/app.py"
+	$(PYTHON) -m streamlit run ui/Home.py --server.headless true

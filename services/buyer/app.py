@@ -48,9 +48,21 @@ def evaluate(req: EvaluateRequest):
 
 
 @app.get("/internal/forecast")
-def forecast(scenario: str = "normal"):
+def forecast(scenario: str = "normal", bands: bool = False):
     """Buyer's own view (Buyer role in the UI). Not exposed to the coordinator."""
-    return simulate(data.load_profile(conn), scenario).summary()
+    r = simulate(data.load_profile(conn), scenario)
+    return r.summary() | ({"p5": r.p5, "p50": r.p50, "p95": r.p95} if bands else {})
+
+
+@app.get("/internal/company")
+def internal_company():
+    """Buyer's own view (Buyer role in the UI). Private limits included; never sent to the coordinator."""
+    return data.company(conn)
+
+
+@app.get("/internal/payables")
+def internal_payables():
+    return data.payables(conn)
 
 
 @app.post("/payables/check")

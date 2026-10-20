@@ -53,19 +53,11 @@ def _post(client: httpx.Client, path: str, **kw) -> dict:
     return r.json()
 
 
-def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--offline", action="store_true", help="LLM_MODE=offline (deterministic agents)")
-    ap.add_argument("--ledger", choices=["auto", "anvil", "none", "configured"], default="auto")
-    ap.add_argument("--invoice", default="ALF-2026-0142")
-    args = ap.parse_args(argv)
-
-    ledger = args.ledger
+def start_stack(ledger: str, run_dir: Path, ports: dict[str, int], offline: bool) -> tuple[list, dict, dict]:
+    """Starts (anvil +) the four services as separate processes. Returns (processes, urls, env)."""
     if ledger == "auto":
         ledger = "anvil" if local_chain.available() else "none"
-    run_dir = REPO_ROOT / "data" / "runs" / datetime.now().strftime("%Y%m%d-%H%M%S")
     run_dir.mkdir(parents=True, exist_ok=True)
-    ports = {name: local_chain.free_port() for name in SERVICES}
     url = {name: f"http://127.0.0.1:{p}" for name, p in ports.items()}
     env = os.environ | {
         "SUPPLIER_DB": str(run_dir / "alpha_foods.db"), "BUYER_DB": str(run_dir / "beta_markets.db"),
@@ -73,11 +65,11 @@ def main(argv: list[str] | None = None) -> int:
         "AUDIT_LOG": str(run_dir / "audit_log.jsonl"), "BANK_LOG": str(run_dir / "bank_sandbox_log.jsonl"),
         "BANK_WEBHOOK_SECRET": os.environ.get("BANK_WEBHOOK_SECRET") or secrets.token_hex(16),
         "BANK_URL": url["bank"], "BANK_WEBHOOK_URL": url["coordinator"] + "/webhooks/bank",
-        "SUPPLIER_URL": url["supplier"], "BUYER_URL": url["buyer"], "BANK_STEP_SECONDS": "0.5",
+        "SUPPLIER_URL": url["supplier"], "BUYER_URL": url["buyer"], "COORDINATOR_URL": url["coordinator"],
+        "BANK_STEP_SECONDS": os.environ.get("BANK_STEP_SECONDS", "0.5"),
     }
-    if args.offline:
+    if offline:
         env["LLM_MODE"] = "offline"
-
     procs: list[subprocess.Popen] = []
     try:
         if ledger == "anvil":
@@ -91,16 +83,40 @@ def main(argv: list[str] | None = None) -> int:
                     "SUPPLIER_SIGNER_KEY": s.supplier_signer_key, "BUYER_SIGNER_KEY": s.buyer_signer_key}
         elif ledger == "none":
             env["LEDGER_TARGET"] = "none"
-
-        logs = {}
         for name, (target, extra) in SERVICES.items():
-            logs[name] = (run_dir / f"{name}.log").open("w")
+            log = (run_dir / f"{name}.log").open("w")
             procs.append(subprocess.Popen(
                 [sys.executable, "-m", "uvicorn", target, *extra, "--port", str(ports[name])],
-                cwd=REPO_ROOT, env=env, stdout=logs[name], stderr=subprocess.STDOUT))
+                cwd=REPO_ROOT, env=env, stdout=log, stderr=subprocess.STDOUT))
         for name in SERVICES:
             _wait(url[name] + "/docs")
+    except BaseException:
+        stop_stack(procs)
+        raise
+    return procs, url, env
 
+
+def stop_stack(procs: list) -> None:
+    for p in reversed(procs):
+        p.terminate()
+    for p in procs:
+        try:
+            p.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            p.kill()
+
+
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--offline", action="store_true", help="LLM_MODE=offline (deterministic agents)")
+    ap.add_argument("--ledger", choices=["auto", "anvil", "none", "configured"], default="auto")
+    ap.add_argument("--invoice", default="ALF-2026-0142")
+    args = ap.parse_args(argv)
+
+    run_dir = REPO_ROOT / "data" / "runs" / datetime.now().strftime("%Y%m%d-%H%M%S")
+    ports = {name: local_chain.free_port() for name in SERVICES}
+    procs, url, env = start_stack(args.ledger, run_dir, ports, args.offline)
+    try:
         supplier = httpx.Client(base_url=url["supplier"], timeout=120)
         coord = httpx.Client(base_url=url["coordinator"], timeout=300)
         health = coord.get("/health").json()
@@ -162,13 +178,7 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Run artifacts (DBs, audit log, bank sandbox log, service logs): {run_dir}")
         return 0 if deal["state"] == "SETTLED" else 1
     finally:
-        for p in reversed(procs):
-            p.terminate()
-        for p in procs:
-            try:
-                p.wait(timeout=10)
-            except subprocess.TimeoutExpired:
-                p.kill()
+        stop_stack(procs)
 
 
 if __name__ == "__main__":
