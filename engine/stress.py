@@ -16,6 +16,7 @@ CLI: python -m engine.stress --company alpha|beta
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 from dataclasses import asdict, dataclass, field, replace
 from datetime import date, timedelta
 
@@ -94,14 +95,36 @@ class StressResult:
         return d
 
 
+_seed_override: int | None = None
+
+
+@contextmanager
+def seed_override(seed: int):
+    """Experiments only: run code that calls simulate() with default arguments on a different random draw
+    (a fresh stress set), without changing that code."""
+    global _seed_override
+    previous, _seed_override = _seed_override, seed
+    try:
+        yield
+    finally:
+        _seed_override = previous
+
+
+def _seed(seed: int | None) -> int:
+    if seed is not None:
+        return seed
+    return DEFAULT_SEED if _seed_override is None else _seed_override
+
+
 def simulate_paths(
     profile: LiquidityProfile,
     scenario: str = "normal",
     horizon: int = DEFAULT_HORIZON,
     n_paths: int = DEFAULT_PATHS,
-    seed: int = DEFAULT_SEED,
+    seed: int | None = None,
 ) -> np.ndarray:
     """Cash balance per path (rows) and day 1..H (columns)."""
+    seed = _seed(seed)
     if scenario not in SCENARIOS:
         raise ValueError(f"unknown scenario {scenario!r}")
     delay_mult, expense_mult = SCENARIOS[scenario]
@@ -138,8 +161,9 @@ def simulate(
     scenario: str = "normal",
     horizon: int = DEFAULT_HORIZON,
     n_paths: int = DEFAULT_PATHS,
-    seed: int = DEFAULT_SEED,
+    seed: int | None = None,
 ) -> StressResult:
+    seed = _seed(seed)
     cash = simulate_paths(profile, scenario, horizon, n_paths, seed)
     min_cash = cash.min(axis=1)
     p5, p50, p95 = np.percentile(cash, [5, 50, 95], axis=0)
