@@ -1,4 +1,4 @@
-# AuditFlow AI
+git# AuditFlow AI
 
 **Privacy-preserving multi-agent working capital optimization for SMEs.**
 WeBank Fintechathon 2026, International Track, Topic E (SME Finance Copilot).
