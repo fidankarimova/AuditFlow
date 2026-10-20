@@ -9,120 +9,120 @@
       "scenario": "A",
       "step": "Register + buyer-confirm invoice",
       "function": "registerInvoice",
-      "tx_hash": "0xb254ad7cf6e4628bc68fe38e55b194b6fea6f00a9abd6053414adee4e31622d6",
-      "explorer_url": "https://sepolia.basescan.org/tx/0xb254ad7cf6e4628bc68fe38e55b194b6fea6f00a9abd6053414adee4e31622d6"
+      "tx_hash": "0x2bec37bf2027a86053090163877ed8ff204d6e0152d1b5f102cef7ac5d68b41b",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x2bec37bf2027a86053090163877ed8ff204d6e0152d1b5f102cef7ac5d68b41b"
     },
     {
       "scenario": "A",
       "step": "Register + buyer-confirm invoice",
       "function": "confirmByBuyerWithSig",
-      "tx_hash": "0x5ff27e052d6d538bfaff7048b43647921c377e8f67234ddc2e76db44202a5669",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x5ff27e052d6d538bfaff7048b43647921c377e8f67234ddc2e76db44202a5669"
+      "tx_hash": "0x4ee786422bdee5689bf257175989080c548f642832a72bdba6c3c81c75587eee",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x4ee786422bdee5689bf257175989080c548f642832a72bdba6c3c81c75587eee"
     },
     {
       "scenario": "A",
       "step": "BILNO + negotiation, commit v1",
       "function": "commitAgreement",
-      "tx_hash": "0x316dbd1885151fa4f6380701354b5c10ff590e82f4188ed9ef9a9b7d95b276a1",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x316dbd1885151fa4f6380701354b5c10ff590e82f4188ed9ef9a9b7d95b276a1"
+      "tx_hash": "0x2c9883ec761f8b80fa90479e8bbf4d6d1e65740005024a892d6819acbba8b528",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x2c9883ec761f8b80fa90479e8bbf4d6d1e65740005024a892d6819acbba8b528"
     },
     {
       "scenario": "A",
       "step": "Supplier approves v1",
       "function": "approve:supplier",
-      "tx_hash": "0x7558acae4714ff12b2ed1baf2630ac72a7e8eb284b0b0276b895f6435ed56daa",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x7558acae4714ff12b2ed1baf2630ac72a7e8eb284b0b0276b895f6435ed56daa"
+      "tx_hash": "0xba12b9c345ee58aaf5ee068ce3163977ba82cbd79ff00a3d6fab13d4d4d0f699",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xba12b9c345ee58aaf5ee068ce3163977ba82cbd79ff00a3d6fab13d4d4d0f699"
     },
     {
       "scenario": "A",
       "step": "Buyer approves v1",
       "function": "approve:buyer",
-      "tx_hash": "0x88eda45d9474bd09f225f287f2eb14e8632679e497bdde48a7fce8838f676cbd",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x88eda45d9474bd09f225f287f2eb14e8632679e497bdde48a7fce8838f676cbd"
+      "tx_hash": "0x00d4d93c861de0a7d4ef895350a091c17dcbfa1a2c3cf834957afbcbc43e83de",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x00d4d93c861de0a7d4ef895350a091c17dcbfa1a2c3cf834957afbcbc43e83de"
     },
     {
       "scenario": "A",
       "step": "ATTACK S6: change amount after approval",
       "function": "supersede",
-      "tx_hash": "0x32b5b697818af3f85eb52a8e893aafe83faa3c7ae1e2eb5168b52918f8749b80",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x32b5b697818af3f85eb52a8e893aafe83faa3c7ae1e2eb5168b52918f8749b80"
+      "tx_hash": "0x2607a9646db2b4d6a66d8703394c345d29c287a9e7b1e9ffa3b9c6752a03760c",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x2607a9646db2b4d6a66d8703394c345d29c287a9e7b1e9ffa3b9c6752a03760c"
     },
     {
       "scenario": "A",
       "step": "ATTACK S6: change amount after approval",
       "function": "commitAgreement",
-      "tx_hash": "0x42a2a579c2360022b0a013287b958121369d7382fc9b29f377b6e90be79880f3",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x42a2a579c2360022b0a013287b958121369d7382fc9b29f377b6e90be79880f3"
+      "tx_hash": "0xb15070a284bdaa398d6c2314ca17f58b3fe3e99ac629437e72253edb9ab92f66",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xb15070a284bdaa398d6c2314ca17f58b3fe3e99ac629437e72253edb9ab92f66"
     },
     {
       "scenario": "A",
       "step": "ATTACK S6: reuse the v1 approval",
       "function": "approve(v1) REVERTED",
-      "tx_hash": "0x8215d929c2b1e0f8c0ee738003325b5b0ab6dd560f757cf603e4d8a1bdd13ba1",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x8215d929c2b1e0f8c0ee738003325b5b0ab6dd560f757cf603e4d8a1bdd13ba1"
+      "tx_hash": "0x2726b9b14cf078adea1988992fef548a601157ad7ddbf976965cca07f333d029",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x2726b9b14cf078adea1988992fef548a601157ad7ddbf976965cca07f333d029"
     },
     {
       "scenario": "A",
       "step": "Restore optimum terms (new version)",
       "function": "supersede",
-      "tx_hash": "0xb024b7fc67304aa2cc4ca0e3bda53e31696bc80ed9eff9b9c8e0d225efd6876c",
-      "explorer_url": "https://sepolia.basescan.org/tx/0xb024b7fc67304aa2cc4ca0e3bda53e31696bc80ed9eff9b9c8e0d225efd6876c"
+      "tx_hash": "0x34cf113ef851b6778c388676601a3a571c76b85d2c5bb3b6ad848fc1c34fca3e",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x34cf113ef851b6778c388676601a3a571c76b85d2c5bb3b6ad848fc1c34fca3e"
     },
     {
       "scenario": "A",
       "step": "Restore optimum terms (new version)",
       "function": "commitAgreement",
-      "tx_hash": "0x25712af9bf344c752e52d645ce84c0cbfeeb06307b3e8a74ab13557a83576698",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x25712af9bf344c752e52d645ce84c0cbfeeb06307b3e8a74ab13557a83576698"
+      "tx_hash": "0x63e96230b471414a9d9f290c1a52ae4987b9f51710b17f57feefe904e868e481",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x63e96230b471414a9d9f290c1a52ae4987b9f51710b17f57feefe904e868e481"
     },
     {
       "scenario": "A",
       "step": "Supplier approves new version",
       "function": "approve:supplier",
-      "tx_hash": "0x32e473436abe374a270ab34ff7b810230d8aebb2d60e55e0a0b80ff71dceb5be",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x32e473436abe374a270ab34ff7b810230d8aebb2d60e55e0a0b80ff71dceb5be"
+      "tx_hash": "0x1cd2a5b126d0499934e20fb2cae792fe4cf3f0b921557640cc4e7f7e2510daa6",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x1cd2a5b126d0499934e20fb2cae792fe4cf3f0b921557640cc4e7f7e2510daa6"
     },
     {
       "scenario": "A",
       "step": "Buyer approves new version",
       "function": "approve:buyer",
-      "tx_hash": "0xccebebd851d94f5beb08d7ebb329e00b0b876c7260cefc8764e2ade0095ad27c",
-      "explorer_url": "https://sepolia.basescan.org/tx/0xccebebd851d94f5beb08d7ebb329e00b0b876c7260cefc8764e2ade0095ad27c"
+      "tx_hash": "0xff5e081c9351e921f040eadd8e3e0de204a1cf68c46eedfbfac507966b2dc65c",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xff5e081c9351e921f040eadd8e3e0de204a1cf68c46eedfbfac507966b2dc65c"
     },
     {
       "scenario": "A",
       "step": "Execute bank payment + recordSubmission",
       "function": "recordSubmission",
-      "tx_hash": "0xe6f80890d02bece07ca6ce6c1514ec831e95b3a6ebde8584497b56c69bfdbde8",
-      "explorer_url": "https://sepolia.basescan.org/tx/0xe6f80890d02bece07ca6ce6c1514ec831e95b3a6ebde8584497b56c69bfdbde8"
+      "tx_hash": "0x97124cc4bcf684534d0b0f8ea080277b3bcd4632a1999ad9e7cde93c8b1ba186",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x97124cc4bcf684534d0b0f8ea080277b3bcd4632a1999ad9e7cde93c8b1ba186"
     },
     {
       "scenario": "A",
       "step": "Execute bank payment + recordSubmission",
       "function": "recordSettlement",
-      "tx_hash": "0x13d831b4c774afc2a597bb334321c7e6130e4f23120288deb63ca49163bc592e",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x13d831b4c774afc2a597bb334321c7e6130e4f23120288deb63ca49163bc592e"
+      "tx_hash": "0xad466c4ea2e1137a36939845284a7d677554d779fad4e2658364ac2a30d6dc2a",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xad466c4ea2e1137a36939845284a7d677554d779fad4e2658364ac2a30d6dc2a"
     },
     {
       "scenario": "A",
       "step": "ATTACK S2: duplicate invoice",
       "function": "registerInvoice REVERTED",
-      "tx_hash": "0x9554a5d8a3097fce68b502a773a617e4dc90c2ccc54678668d9cc7f6bf76a7c6",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x9554a5d8a3097fce68b502a773a617e4dc90c2ccc54678668d9cc7f6bf76a7c6"
+      "tx_hash": "0xf419ed34d5457ba9ceb4e475c22d485a5d08d9668883da03dfca9483bdbf8cd1",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xf419ed34d5457ba9ceb4e475c22d485a5d08d9668883da03dfca9483bdbf8cd1"
     },
     {
       "scenario": "B",
       "step": "Register + buyer-confirm invoice (buyer reserve 440,000)",
       "function": "registerInvoice",
-      "tx_hash": "0x74ce8d33adebe55801b6f9642b8830f506b9e0ac81445a6f69515de17fdb134f",
-      "explorer_url": "https://sepolia.basescan.org/tx/0x74ce8d33adebe55801b6f9642b8830f506b9e0ac81445a6f69515de17fdb134f"
+      "tx_hash": "0x2263c779ceec1bf27fe18b23af87acc6eb028622fa3d347d87156c667fd4e86d",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x2263c779ceec1bf27fe18b23af87acc6eb028622fa3d347d87156c667fd4e86d"
     },
     {
       "scenario": "B",
       "step": "Register + buyer-confirm invoice (buyer reserve 440,000)",
       "function": "confirmByBuyerWithSig",
-      "tx_hash": "0xf379db770378998762ef733b0e9c5249ea7c2c1251e0d74ff7f43cddb04ddb9b",
-      "explorer_url": "https://sepolia.basescan.org/tx/0xf379db770378998762ef733b0e9c5249ea7c2c1251e0d74ff7f43cddb04ddb9b"
+      "tx_hash": "0x964807ba013d9d39083cbe1e834c4932017c475b20f2c037f8b8d929a869e836",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x964807ba013d9d39083cbe1e834c4932017c475b20f2c037f8b8d929a869e836"
     }
   ]
 }

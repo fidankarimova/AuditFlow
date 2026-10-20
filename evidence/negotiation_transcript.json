@@ -1,7 +1,7 @@
 {
   "scenario_A_deal": {
-    "negotiation_id": "neg_a4a22c88cce6",
-    "invoice_number": "ALF-E1020113723-0142",
+    "negotiation_id": "neg_deebad0d85d2",
+    "invoice_number": "ALF-E1020122523-0142",
     "rounds": [
       {
         "side": "seller",
@@ -255,8 +255,8 @@
     "recommendation": "early_payment"
   },
   "scenario_B_no_deal": {
-    "negotiation_id": "neg_cbd8e947d181",
-    "invoice_number": "ALF-E1020113723B-0142",
+    "negotiation_id": "neg_87f4010fc752",
+    "invoice_number": "ALF-E1020122523B-0142",
     "rounds": [],
     "outcome": "NO_FEASIBLE_AGREEMENT",
     "close_check": null,
