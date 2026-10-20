@@ -193,7 +193,7 @@ class Coordinator:
         if r.status_code == 404:
             raise CoordinatorError(404, "unknown invoice")
         doc = r.raise_for_status().json()
-        checks = compliance.compliance_agent(self.audit).call("check_invoice", {"doc": doc})
+        checks = compliance.compliance_agent(self.audit, self.settings).call("check_invoice", {"doc": doc})
         if not checks["ok"]:
             self._log("compliance_agent", "invoice_rejected", "T1", doc, checks)
             raise CoordinatorError(422, "invoice failed compliance checks", checks)
@@ -285,7 +285,7 @@ class Coordinator:
 
     def _commit_version(self, deal_id: str, agreement: dict, previous: dict | None) -> None:
         doc = self._invoice(self._deal_row(deal_id)["invoice_hash"])["doc"]
-        checks = compliance.compliance_agent(self.audit).call(
+        checks = compliance.compliance_agent(self.audit, self.settings).call(
             "check_agreement", {"agreement": agreement, "doc": doc, "now_ts": int(self.clock())})
         self._store_compliance(deal_id, f"agreement v{agreement['version']}", checks)
         if not checks["ok"]:
@@ -376,7 +376,7 @@ class Coordinator:
         if not (a["supplier_sig"] and a["buyer_sig"]):  # defence in depth; APPROVED implies both
             raise CoordinatorError(409, "both approvals are required")
         terms, doc = a["agreement"], self._invoice(deal["invoice_hash"])["doc"]
-        checks = compliance.compliance_agent(self.audit).call(
+        checks = compliance.compliance_agent(self.audit, self.settings).call(
             "check_agreement", {"agreement": terms, "doc": doc, "now_ts": int(self.clock())})
         if not checks["ok"]:
             raise CoordinatorError(422, "agreement failed compliance checks", checks)

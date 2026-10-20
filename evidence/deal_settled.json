@@ -1,8 +1,8 @@
 {
-  "deal_id": "D-a9614ef2a0",
+  "deal_id": "D-c8807bf6a8",
   "state": "SETTLED",
   "invoice": {
-    "number": "ALF-E1020093416-0142",
+    "number": "ALF-E1020095128-0142",
     "seller": "Alpha Foods",
     "buyer": "Beta Markets",
     "face": 100000.0,
@@ -13,36 +13,36 @@
     "payee_account": "SBX-TR-ALPHA-0001",
     "status": "open"
   },
-  "invoice_hash": "0xb9fd11ffc906c07af32f426dcd2d161bd7a44051a8f4981b328fa25c07141a01",
-  "ledger_invoice_id": 1,
-  "payment_id": "pay_f593efd723d346329956",
+  "invoice_hash": "0x5fdcf584f2a4f2d9ecc73150d09cb4cf5b45c53cb40fb84b7f141a78b027b2b8",
+  "ledger_invoice_id": 2,
+  "payment_id": "pay_faa88913449144e4ad51",
   "payment": {
-    "idempotency_key": "AGR-D-a9614ef2a0-v3-66ab8190",
-    "payment_id": "pay_f593efd723d346329956",
-    "reference": "0x8afa3676bb18540553989ce04c869be08558cd8992e5b66557664c461a6eac31",
+    "idempotency_key": "AGR-D-c8807bf6a8-v3-dbceefce",
+    "payment_id": "pay_faa88913449144e4ad51",
+    "reference": "0xe1d53860d180f08e9d357ada2555b45a0a9ece2db457ef39550b759a074d1ab9",
     "amount_minor": 6045000,
     "currency": "TRY",
     "status": "SETTLED",
-    "updated_at": "2026-10-20T09:34:25.653+00:00"
+    "updated_at": "2026-10-20T09:52:05.302+00:00"
   },
   "agreement": {
     "version": 3,
     "agreement": {
-      "agreement_id": "AGR-D-a9614ef2a0",
+      "agreement_id": "AGR-D-c8807bf6a8",
       "version": 3,
-      "invoice_id": 1,
-      "invoice_hash": "0xb9fd11ffc906c07af32f426dcd2d161bd7a44051a8f4981b328fa25c07141a01",
-      "seller": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-      "buyer": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+      "invoice_id": 2,
+      "invoice_hash": "0x5fdcf584f2a4f2d9ecc73150d09cb4cf5b45c53cb40fb84b7f141a78b027b2b8",
+      "seller": "0x512c6f67807208C520885d6914ee63237e331951",
+      "buyer": "0xD95a460951eF343591db01b176513947D3641b60",
       "face_amount_x": 6200000,
       "discount_bps": 250,
       "pay_amount": 6045000,
       "currency": "TRY",
       "payee_account": "SBX-TR-ALPHA-0001",
-      "expires_at": 1792575263,
-      "idempotency_key": "AGR-D-a9614ef2a0-v3-66ab8190"
+      "expires_at": 1792576313,
+      "idempotency_key": "AGR-D-c8807bf6a8-v3-dbceefce"
     },
-    "agreement_hash": "0x8afa3676bb18540553989ce04c869be08558cd8992e5b66557664c461a6eac31",
+    "agreement_hash": "0xe1d53860d180f08e9d357ada2555b45a0a9ece2db457ef39550b759a074d1ab9",
     "supplier_signed": 1,
     "buyer_signed": 1,
     "active": 1
@@ -51,21 +51,21 @@
     {
       "version": 1,
       "agreement": {
-        "agreement_id": "AGR-D-a9614ef2a0",
+        "agreement_id": "AGR-D-c8807bf6a8",
         "version": 1,
-        "invoice_id": 1,
-        "invoice_hash": "0xb9fd11ffc906c07af32f426dcd2d161bd7a44051a8f4981b328fa25c07141a01",
-        "seller": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-        "buyer": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+        "invoice_id": 2,
+        "invoice_hash": "0x5fdcf584f2a4f2d9ecc73150d09cb4cf5b45c53cb40fb84b7f141a78b027b2b8",
+        "seller": "0x512c6f67807208C520885d6914ee63237e331951",
+        "buyer": "0xD95a460951eF343591db01b176513947D3641b60",
         "face_amount_x": 6200000,
         "discount_bps": 250,
         "pay_amount": 6045000,
         "currency": "TRY",
         "payee_account": "SBX-TR-ALPHA-0001",
-        "expires_at": 1792575262,
-        "idempotency_key": "AGR-D-a9614ef2a0-v1-c92b034b"
+        "expires_at": 1792576299,
+        "idempotency_key": "AGR-D-c8807bf6a8-v1-3efbb479"
       },
-      "agreement_hash": "0x71d039cd265a59dd935a81c1fe4874d7f9ae7a3694fa4611e97fa60c082dbada",
+      "agreement_hash": "0xd308d593d0608eaa970b90c84ec0cd21e84238b0cf66edd5f4d0c20b4489640d",
       "supplier_signed": 1,
       "buyer_signed": 1,
       "active": 0
@@ -73,21 +73,21 @@
     {
       "version": 2,
       "agreement": {
-        "agreement_id": "AGR-D-a9614ef2a0",
+        "agreement_id": "AGR-D-c8807bf6a8",
         "version": 2,
-        "invoice_id": 1,
-        "invoice_hash": "0xb9fd11ffc906c07af32f426dcd2d161bd7a44051a8f4981b328fa25c07141a01",
-        "seller": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-        "buyer": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+        "invoice_id": 2,
+        "invoice_hash": "0x5fdcf584f2a4f2d9ecc73150d09cb4cf5b45c53cb40fb84b7f141a78b027b2b8",
+        "seller": "0x512c6f67807208C520885d6914ee63237e331951",
+        "buyer": "0xD95a460951eF343591db01b176513947D3641b60",
         "face_amount_x": 6000000,
         "discount_bps": 250,
         "pay_amount": 5850000,
         "currency": "TRY",
         "payee_account": "SBX-TR-ALPHA-0001",
-        "expires_at": 1792575263,
-        "idempotency_key": "AGR-D-a9614ef2a0-v2-b2c526e9"
+        "expires_at": 1792576306,
+        "idempotency_key": "AGR-D-c8807bf6a8-v2-88e581c6"
       },
-      "agreement_hash": "0xbfbe21b415626ab1097401af4a16723c79565961a74284064876648aacc2ba95",
+      "agreement_hash": "0x8fbf1c5ad527d0fe006139294ce582f7862f651b54fb68373af41641ef93758c",
       "supplier_signed": 0,
       "buyer_signed": 0,
       "active": 0
@@ -95,29 +95,29 @@
     {
       "version": 3,
       "agreement": {
-        "agreement_id": "AGR-D-a9614ef2a0",
+        "agreement_id": "AGR-D-c8807bf6a8",
         "version": 3,
-        "invoice_id": 1,
-        "invoice_hash": "0xb9fd11ffc906c07af32f426dcd2d161bd7a44051a8f4981b328fa25c07141a01",
-        "seller": "0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC",
-        "buyer": "0x90F79bf6EB2c4f870365E785982E1f101E93b906",
+        "invoice_id": 2,
+        "invoice_hash": "0x5fdcf584f2a4f2d9ecc73150d09cb4cf5b45c53cb40fb84b7f141a78b027b2b8",
+        "seller": "0x512c6f67807208C520885d6914ee63237e331951",
+        "buyer": "0xD95a460951eF343591db01b176513947D3641b60",
         "face_amount_x": 6200000,
         "discount_bps": 250,
         "pay_amount": 6045000,
         "currency": "TRY",
         "payee_account": "SBX-TR-ALPHA-0001",
-        "expires_at": 1792575263,
-        "idempotency_key": "AGR-D-a9614ef2a0-v3-66ab8190"
+        "expires_at": 1792576313,
+        "idempotency_key": "AGR-D-c8807bf6a8-v3-dbceefce"
       },
-      "agreement_hash": "0x8afa3676bb18540553989ce04c869be08558cd8992e5b66557664c461a6eac31",
+      "agreement_hash": "0xe1d53860d180f08e9d357ada2555b45a0a9ece2db457ef39550b759a074d1ab9",
       "supplier_signed": 1,
       "buyer_signed": 1,
       "active": 1
     }
   ],
   "negotiation": {
-    "negotiation_id": "neg_aad7e1adb42c",
-    "invoice_number": "ALF-E1020093416-0142",
+    "negotiation_id": "neg_365be48bfedf",
+    "invoice_number": "ALF-E1020095128-0142",
     "rounds": [
       {
         "side": "seller",
@@ -1376,160 +1376,160 @@
   ],
   "history": [
     {
-      "ts": "2026-10-20T09:34:20.761+00:00",
+      "ts": "2026-10-20T09:51:36.538+00:00",
       "from_state": null,
       "to_state": "VERIFIED",
       "actor": "coordinator",
       "note": "buyer confirmation signature verified",
-      "ledger_tx": "0x0427885125aaa41f7d63bc14af6eae2d0da349b28f61b5d40043fb60abd1e80c"
+      "ledger_tx": "0x8e8c6ebf44a253d3eb35cd43624928e367047a19ade6c1a1813f541f25bff16d"
     },
     {
-      "ts": "2026-10-20T09:34:23.113+00:00",
+      "ts": "2026-10-20T09:51:40.567+00:00",
       "from_state": "VERIFIED",
       "to_state": "NEGOTIATED",
       "actor": "coordinator",
-      "note": "agreement v1 0x71d039cd26...",
-      "ledger_tx": "0x91f5eb55325c3ead3a70e74497c86a4a177678aea8e28d42397bb40d33feb336"
+      "note": "agreement v1 0xd308d593d0...",
+      "ledger_tx": "0x1655a19a1ce90be922c3d9a4c726baf5a101fd68532ef074707898b99aed9d08"
     },
     {
-      "ts": "2026-10-20T09:34:23.425+00:00",
+      "ts": "2026-10-20T09:51:46.209+00:00",
       "from_state": "NEGOTIATED",
       "to_state": "APPROVED",
       "actor": "coordinator",
       "note": "both signatures verified",
-      "ledger_tx": "0x0e233ed74600819e469b600cd40fa311cdc08dc703e0780ad7bedeb896c594cf"
+      "ledger_tx": "0x69717b6e5d2e824a5fed85c1e2a18636077d298d2b6760b65b54ae9ccc1fd910"
     },
     {
-      "ts": "2026-10-20T09:34:23.740+00:00",
+      "ts": "2026-10-20T09:51:51.721+00:00",
       "from_state": "APPROVED",
       "to_state": "NEGOTIATED",
       "actor": "coordinator",
-      "note": "agreement v2 0xbfbe21b415...",
-      "ledger_tx": "0x90d8bd19d316e3fb69ab3bad0decdd5b73e003c8bf1a9e4cf5f685ae76f74ddb"
+      "note": "agreement v2 0x8fbf1c5ad5...",
+      "ledger_tx": "0xb8e0451bcb55a1328528ac360e42cd0faa9b1da6645793da6f1738862937634d"
     },
     {
-      "ts": "2026-10-20T09:34:24.224+00:00",
+      "ts": "2026-10-20T09:51:58.869+00:00",
       "from_state": "NEGOTIATED",
       "to_state": "NEGOTIATED",
       "actor": "coordinator",
-      "note": "agreement v3 0x8afa3676bb...",
-      "ledger_tx": "0xdb70a5ecc3a3263c3ea8f4ef45eca30b12cc389682af1f08bd549600c8707622"
+      "note": "agreement v3 0xe1d53860d1...",
+      "ledger_tx": "0x1cab0235049023283a69474d65f88da2cfa45f7c5c17d8d76e3c9e9ac5f37982"
     },
     {
-      "ts": "2026-10-20T09:34:24.552+00:00",
+      "ts": "2026-10-20T09:52:04.225+00:00",
       "from_state": "NEGOTIATED",
       "to_state": "APPROVED",
       "actor": "coordinator",
       "note": "both signatures verified",
-      "ledger_tx": "0x176bc7be6e83ece1299ba904acd545d6810cbdc732e3f83e32b4ab1a7f70942f"
+      "ledger_tx": "0xc9877fee5d8b7b5cf80f0126b260077ba62e32adccde0baaa415bb93a0db2be0"
     },
     {
-      "ts": "2026-10-20T09:34:24.710+00:00",
+      "ts": "2026-10-20T09:52:08.241+00:00",
       "from_state": "APPROVED",
       "to_state": "SUBMITTED",
       "actor": "coordinator",
-      "note": "bank payment pay_f593efd723d346329956",
-      "ledger_tx": "0xc42d4c28edf47b5368524a0afb0b65f67338798c2208fb8a9d5862610fd1c6b1"
+      "note": "bank payment pay_faa88913449144e4ad51",
+      "ledger_tx": "0xa52bbe36b27b043cf3081562c42fb7cddd69ff640bdf8d385edd79a2f1b3891c"
     },
     {
-      "ts": "2026-10-20T09:34:25.782+00:00",
+      "ts": "2026-10-20T09:52:12.367+00:00",
       "from_state": "SUBMITTED",
       "to_state": "SETTLED",
       "actor": "coordinator",
       "note": "verified bank webhook",
-      "ledger_tx": "0xfed852c812e73c663cf9e4e52c40aa23e8d038be6c62dbe3e48e18235b05ea6a"
+      "ledger_tx": "0x58a360c159e984e158cfd1c66306d4a9f33f3242d03f7b91c3aa00d27c1dd9df"
     }
   ],
   "ledger_txs": [
     {
-      "ts": "2026-10-20T09:34:20.615+00:00",
+      "ts": "2026-10-20T09:51:32.297+00:00",
       "action": "registerInvoice",
-      "tx_hash": "0x43194a5bbc844d662b6dd2b910a8a505726028605d587600fc8cd5dfd5e69e91",
-      "explorer_url": null,
+      "tx_hash": "0xf0818c52e1016c80e217f5a590fcd617bc26f108786bc4a14dd723bfaf2b6e97",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xf0818c52e1016c80e217f5a590fcd617bc26f108786bc4a14dd723bfaf2b6e97",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:20.759+00:00",
+      "ts": "2026-10-20T09:51:36.533+00:00",
       "action": "confirmByBuyerWithSig",
-      "tx_hash": "0x0427885125aaa41f7d63bc14af6eae2d0da349b28f61b5d40043fb60abd1e80c",
-      "explorer_url": null,
+      "tx_hash": "0x8e8c6ebf44a253d3eb35cd43624928e367047a19ade6c1a1813f541f25bff16d",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x8e8c6ebf44a253d3eb35cd43624928e367047a19ade6c1a1813f541f25bff16d",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:23.111+00:00",
+      "ts": "2026-10-20T09:51:40.562+00:00",
       "action": "commitAgreement",
-      "tx_hash": "0x91f5eb55325c3ead3a70e74497c86a4a177678aea8e28d42397bb40d33feb336",
-      "explorer_url": null,
+      "tx_hash": "0x1655a19a1ce90be922c3d9a4c726baf5a101fd68532ef074707898b99aed9d08",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x1655a19a1ce90be922c3d9a4c726baf5a101fd68532ef074707898b99aed9d08",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:23.269+00:00",
+      "ts": "2026-10-20T09:51:44.594+00:00",
       "action": "approve:supplier",
-      "tx_hash": "0x1e67e28d1a2289e7eea86f97312e62817b123e1a99f8f31bba3af4724dddf01a",
-      "explorer_url": null,
+      "tx_hash": "0xd88306f7029d22a35838f445141a6a734d4cf00e42f7cc4a3f45b0fd164476d5",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xd88306f7029d22a35838f445141a6a734d4cf00e42f7cc4a3f45b0fd164476d5",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:23.422+00:00",
+      "ts": "2026-10-20T09:51:46.203+00:00",
       "action": "approve:buyer",
-      "tx_hash": "0x0e233ed74600819e469b600cd40fa311cdc08dc703e0780ad7bedeb896c594cf",
-      "explorer_url": null,
+      "tx_hash": "0x69717b6e5d2e824a5fed85c1e2a18636077d298d2b6760b65b54ae9ccc1fd910",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x69717b6e5d2e824a5fed85c1e2a18636077d298d2b6760b65b54ae9ccc1fd910",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:23.597+00:00",
+      "ts": "2026-10-20T09:51:47.591+00:00",
       "action": "supersede",
-      "tx_hash": "0xcff058acc03e9cf7a754e77345298f39ba1f2f857ff2ef69d0b442591d66431e",
-      "explorer_url": null,
+      "tx_hash": "0x754b7b31e74031b2db12879df6994dbe6e8878a969611ebc6b3da7b6705047b9",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x754b7b31e74031b2db12879df6994dbe6e8878a969611ebc6b3da7b6705047b9",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:23.735+00:00",
+      "ts": "2026-10-20T09:51:51.714+00:00",
       "action": "commitAgreement",
-      "tx_hash": "0x90d8bd19d316e3fb69ab3bad0decdd5b73e003c8bf1a9e4cf5f685ae76f74ddb",
-      "explorer_url": null,
+      "tx_hash": "0xb8e0451bcb55a1328528ac360e42cd0faa9b1da6645793da6f1738862937634d",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xb8e0451bcb55a1328528ac360e42cd0faa9b1da6645793da6f1738862937634d",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:24.090+00:00",
+      "ts": "2026-10-20T09:51:54.596+00:00",
       "action": "supersede",
-      "tx_hash": "0x3bbbc8c3c78f76731887507a78e5ffbce3b22688a340ae144a87f7e48ebbfb98",
-      "explorer_url": null,
+      "tx_hash": "0xecaa63a4af0566648d5ed69cd9fd360f9930ba5ead6b87f349c35d53970c3c3f",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xecaa63a4af0566648d5ed69cd9fd360f9930ba5ead6b87f349c35d53970c3c3f",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:24.220+00:00",
+      "ts": "2026-10-20T09:51:58.865+00:00",
       "action": "commitAgreement",
-      "tx_hash": "0xdb70a5ecc3a3263c3ea8f4ef45eca30b12cc389682af1f08bd549600c8707622",
-      "explorer_url": null,
+      "tx_hash": "0x1cab0235049023283a69474d65f88da2cfa45f7c5c17d8d76e3c9e9ac5f37982",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x1cab0235049023283a69474d65f88da2cfa45f7c5c17d8d76e3c9e9ac5f37982",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:24.386+00:00",
+      "ts": "2026-10-20T09:52:02.879+00:00",
       "action": "approve:supplier",
-      "tx_hash": "0x64e5d90d28dd4f90b84987ce16f1286765518ab70751cd8c5a7f3e9a70393e7b",
-      "explorer_url": null,
+      "tx_hash": "0x6765d56a9d19365321e70536e759e8d94a53aabc6623bdf3dcd03c621466e09d",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x6765d56a9d19365321e70536e759e8d94a53aabc6623bdf3dcd03c621466e09d",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:24.550+00:00",
+      "ts": "2026-10-20T09:52:04.220+00:00",
       "action": "approve:buyer",
-      "tx_hash": "0x176bc7be6e83ece1299ba904acd545d6810cbdc732e3f83e32b4ab1a7f70942f",
-      "explorer_url": null,
+      "tx_hash": "0xc9877fee5d8b7b5cf80f0126b260077ba62e32adccde0baaa415bb93a0db2be0",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xc9877fee5d8b7b5cf80f0126b260077ba62e32adccde0baaa415bb93a0db2be0",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:24.708+00:00",
+      "ts": "2026-10-20T09:52:08.238+00:00",
       "action": "recordSubmission",
-      "tx_hash": "0xc42d4c28edf47b5368524a0afb0b65f67338798c2208fb8a9d5862610fd1c6b1",
-      "explorer_url": null,
+      "tx_hash": "0xa52bbe36b27b043cf3081562c42fb7cddd69ff640bdf8d385edd79a2f1b3891c",
+      "explorer_url": "https://sepolia.basescan.org/tx/0xa52bbe36b27b043cf3081562c42fb7cddd69ff640bdf8d385edd79a2f1b3891c",
       "note": null
     },
     {
-      "ts": "2026-10-20T09:34:25.777+00:00",
+      "ts": "2026-10-20T09:52:12.363+00:00",
       "action": "recordSettlement",
-      "tx_hash": "0xfed852c812e73c663cf9e4e52c40aa23e8d038be6c62dbe3e48e18235b05ea6a",
-      "explorer_url": null,
+      "tx_hash": "0x58a360c159e984e158cfd1c66306d4a9f33f3242d03f7b91c3aa00d27c1dd9df",
+      "explorer_url": "https://sepolia.basescan.org/tx/0x58a360c159e984e158cfd1c66306d4a9f33f3242d03f7b91c3aa00d27c1dd9df",
       "note": null
     }
   ],

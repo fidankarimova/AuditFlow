@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import json
 import sys
+import time
 from abc import ABC, abstractmethod
 from pathlib import Path
 
@@ -143,15 +144,23 @@ class EvmLedgerClient(LedgerClient):
         if not self._sender_key:
             raise LedgerError(name, "COORDINATOR_PRIVATE_KEY is not set")
         acct = Account.from_key(self._sender_key)
-        try:
-            tx = fn.build_transaction({
-                "from": acct.address, "chainId": self.chain_id,
-                "nonce": self.w3.eth.get_transaction_count(acct.address, "pending"),
-            })
-        except (ContractCustomError, ContractLogicError) as e:
-            raise LedgerError(name, self._decode_error(e)) from e
+        # Public RPCs are load-balanced: the gas estimate can hit a node that has not seen our previous tx yet and
+        # revert spuriously. Retry a few times there before treating the revert as real.
+        attempts = 1 if self.chain_id == 31337 else 6
+        for attempt in range(attempts):
+            try:
+                tx = fn.build_transaction({
+                    "from": acct.address, "chainId": self.chain_id,
+                    "nonce": self._next_nonce(acct.address),
+                })
+                break
+            except (ContractCustomError, ContractLogicError) as e:
+                if attempt == attempts - 1:
+                    raise LedgerError(name, self._decode_error(e)) from e
+                time.sleep(2)
         signed = acct.sign_transaction(tx)
         tx_hash = self.w3.eth.send_raw_transaction(signed.raw_transaction)
+        self._used_nonce = tx["nonce"]
         receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
         if receipt["status"] != 1:
             raise LedgerError(name, "transaction reverted", _hex(tx_hash))
@@ -170,11 +179,17 @@ class EvmLedgerClient(LedgerClient):
         except (ContractCustomError, ContractLogicError) as e:
             reason = self._decode_error(e)
         tx = fn.build_transaction({"from": acct.address, "chainId": self.chain_id, "gas": gas,
-                                   "nonce": self.w3.eth.get_transaction_count(acct.address, "pending")})
+                                   "nonce": self._next_nonce(acct.address)})
         tx_hash = self.w3.eth.send_raw_transaction(acct.sign_transaction(tx).raw_transaction)
+        self._used_nonce = tx["nonce"]
         receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
         return {"function": name, "tx_hash": _hex(tx_hash), "block": receipt["blockNumber"],
                 "status": receipt["status"], "reason": reason}
+
+    def _next_nonce(self, address: str) -> int:
+        # never reuse a nonce even if a lagging RPC node reports an old pending count
+        chain = self.w3.eth.get_transaction_count(address, "pending")
+        return max(chain, getattr(self, "_used_nonce", -1) + 1)
 
     def addresses(self) -> dict[str, str]:
         return {name: c["address"] for name, c in self.deployment["contracts"].items()}

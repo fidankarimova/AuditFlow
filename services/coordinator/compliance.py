@@ -6,7 +6,10 @@ from __future__ import annotations
 import re
 from datetime import date
 
+from functools import partial
+
 from services.common.audit import AuditLog
+from services.common.config import Settings
 from services.common.eip712 import BPS, pay_amount
 from services.common.llm import Tool, ToolRegistry
 from services.coordinator import parties
@@ -38,12 +41,12 @@ def check_invoice(doc: dict, today: str | None = None) -> dict:
     return {"ok": all(x["ok"] for x in f if x["blocking"]), "findings": f}
 
 
-def check_agreement(agreement: dict, doc: dict, now_ts: int) -> dict:
+def check_agreement(agreement: dict, doc: dict, now_ts: int, settings: Settings | None = None) -> dict:
     seller, buyer = parties.get(doc["seller"]), parties.get(doc["buyer"])
     face_minor = round(float(doc["face"]) * 100)
     f = [
-        _finding("seller address is the seller's approver", bool(seller) and agreement["seller"] == seller.signer()),
-        _finding("buyer address is the buyer's approver", bool(buyer) and agreement["buyer"] == buyer.signer()),
+        _finding("seller address is the seller's approver", bool(seller) and agreement["seller"] == seller.signer(settings)),
+        _finding("buyer address is the buyer's approver", bool(buyer) and agreement["buyer"] == buyer.signer(settings)),
         _finding("amount within invoice face", 0 < agreement["face_amount_x"] <= face_minor),
         _finding("currency matches invoice", agreement["currency"] == doc["currency"]),
         _finding("payee account matches registered account",
@@ -58,12 +61,12 @@ def check_agreement(agreement: dict, doc: dict, now_ts: int) -> dict:
     return {"ok": all(x["ok"] for x in f), "findings": f}
 
 
-def compliance_agent(audit: AuditLog | None = None) -> ToolRegistry:
+def compliance_agent(audit: AuditLog | None = None, settings: Settings | None = None) -> ToolRegistry:
     return ToolRegistry.of("compliance_agent", [
         Tool("check_invoice", "Check an invoice document for mismatches and risks.",
              {"type": "object", "properties": {"doc": {"type": "object"}}, "required": ["doc"]}, check_invoice),
         Tool("check_agreement", "Check agreement terms against the invoice.",
              {"type": "object", "properties": {"agreement": {"type": "object"}, "doc": {"type": "object"},
                                                "now_ts": {"type": "integer"}},
-              "required": ["agreement", "doc", "now_ts"]}, check_agreement),
+              "required": ["agreement", "doc", "now_ts"]}, partial(check_agreement, settings=settings)),
     ], audit)
