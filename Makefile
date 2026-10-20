@@ -63,8 +63,9 @@ flow:
 audit-verify:
 	$(PYTHON) -m services.common.audit verify
 
+# End-to-end run + execution evidence (docs/EXECUTION_EVIDENCE.md, evidence/). LEDGER=configured for Base Sepolia.
 demo:
-	@echo "TODO (Phase 9): $(PYTHON) scripts/run_demo_scenario.py"
+	$(PYTHON) scripts/run_demo_scenario.py --ledger $(if $(filter configured,$(LEDGER)),configured,anvil)
 
 ui:
 	$(PYTHON) -m streamlit run ui/Home.py --server.headless true

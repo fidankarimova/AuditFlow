@@ -6,6 +6,7 @@ All amounts are example values in TL. Dates are stored as ISO strings relative t
 from __future__ import annotations
 
 import json
+import os
 import sqlite3
 from datetime import date, timedelta
 from pathlib import Path
@@ -43,9 +44,15 @@ DELAYS = {
 }
 
 
+def invoice_number(suffix: str) -> str:
+    """INVOICE_SERIES (default 2026) lets repeated demo runs on a persistent chain use fresh invoice hashes."""
+    return f"ALF-{os.environ.get('INVOICE_SERIES', '2026')}-{suffix}"
+
+
 def _seed(conn: sqlite3.Connection, as_of: date | None = None) -> None:
     as_of = as_of or date.today()
     d = lambda days: (as_of + timedelta(days=days)).isoformat()  # noqa: E731
+    n = invoice_number
     conn.execute(
         "INSERT INTO company VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
         ("Alpha Foods", as_of.isoformat(), 20_000, 10_000, 2_400, 600, 1_400, 400, 0.18, 5, 500, 0.03, 0.05, 10_000),
@@ -53,10 +60,10 @@ def _seed(conn: sqlite3.Connection, as_of: date | None = None) -> None:
     conn.executemany(
         "INSERT INTO receivables (number, customer, face, due_date, buyer_confirmed, status, memo) VALUES (?,?,?,?,?,?,?)",
         [
-            ("ALF-2026-0142", "Beta Markets", 100_000, d(60), 1, "open", INJECTION_MEMO),  # S3 attack memo
-            ("ALF-2026-0151", "Gamma Cafe", 15_000, d(25), 1, "open", "Weekly catering supply"),
-            ("ALF-2026-0133", "Delta Hotel", 30_000, d(45), 1, "disputed", "Quality complaint on delivery 12"),
-            ("ALF-2026-0160", "Epsilon Trade", 50_000, d(30), 0, "open", "Bulk order"),  # S1 forged: never confirmed
+            (n("0142"), "Beta Markets", 100_000, d(60), 1, "open", INJECTION_MEMO),  # S3 attack memo
+            (n("0151"), "Gamma Cafe", 15_000, d(25), 1, "open", "Weekly catering supply"),
+            (n("0133"), "Delta Hotel", 30_000, d(45), 1, "disputed", "Quality complaint on delivery 12"),
+            (n("0160"), "Epsilon Trade", 50_000, d(30), 0, "open", "Bulk order"),  # S1 forged: never confirmed
         ],
     )
     conn.executemany(

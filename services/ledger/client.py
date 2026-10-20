@@ -157,6 +157,25 @@ class EvmLedgerClient(LedgerClient):
             raise LedgerError(name, "transaction reverted", _hex(tx_hash))
         return {"tx_hash": _hex(tx_hash), "block": receipt["blockNumber"], "receipt": receipt}
 
+    def send_expecting_revert(self, name: str, fn, gas: int = 500_000) -> dict:
+        """Evidence helper for attack runs: sends the call anyway (fixed gas, no estimate) so the revert is mined
+        and has a tx hash. Returns {tx_hash, block, status (0 = reverted), reason (decoded from a dry run)}."""
+        from eth_account import Account
+        from web3.exceptions import ContractCustomError, ContractLogicError
+
+        acct = Account.from_key(self._sender_key)
+        reason = None
+        try:
+            fn.call({"from": acct.address})
+        except (ContractCustomError, ContractLogicError) as e:
+            reason = self._decode_error(e)
+        tx = fn.build_transaction({"from": acct.address, "chainId": self.chain_id, "gas": gas,
+                                   "nonce": self.w3.eth.get_transaction_count(acct.address, "pending")})
+        tx_hash = self.w3.eth.send_raw_transaction(acct.sign_transaction(tx).raw_transaction)
+        receipt = self.w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
+        return {"function": name, "tx_hash": _hex(tx_hash), "block": receipt["blockNumber"],
+                "status": receipt["status"], "reason": reason}
+
     def addresses(self) -> dict[str, str]:
         return {name: c["address"] for name, c in self.deployment["contracts"].items()}
 

@@ -6,6 +6,7 @@ All amounts are example values in TL.
 
 from __future__ import annotations
 
+import os
 import sqlite3
 from datetime import date, timedelta
 from pathlib import Path
@@ -35,7 +36,7 @@ def _seed(conn: sqlite3.Connection, as_of: date | None = None) -> None:
     )
     conn.execute(
         "INSERT INTO payables (number, supplier, face, due_date) VALUES (?,?,?,?)",
-        ("ALF-2026-0142", "Alpha Foods", 100_000, d(60)),
+        (f"ALF-{os.environ.get('INVOICE_SERIES', '2026')}-0142", "Alpha Foods", 100_000, d(60)),
     )
     conn.executemany(
         "INSERT INTO scheduled_outflows VALUES (?,?,?)",

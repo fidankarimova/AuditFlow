@@ -41,6 +41,8 @@ if who == "supplier":
     deal = current_deal()
     terms = (deal or {}).get("agreement", {}) or {}
     terms = terms.get("agreement") if terms else None
+    eligible = ok("supplier", "GET", "/eligible-invoices") or []
+    invoice = deal["invoice"]["number"] if deal else (eligible[-1]["number"] if eligible else None)
     default_inflow = terms["pay_amount"] / 100 if terms else 58_800.0
     default_face = terms["face_amount_x"] / 100 if terms else 60_000.0
     c1, c2, c3 = st.columns(3)
@@ -51,7 +53,7 @@ if who == "supplier":
     if terms:
         st.caption(f"Defaults come from the current agreement ({deal['deal_id']}).")
     w = ok("supplier", "GET", "/forecast/what-if", params={
-        "inflow_today": inflow, "scenario": scenario, "invoice_number": "ALF-2026-0142",
+        "inflow_today": inflow, "scenario": scenario, "invoice_number": invoice,
         "face_paid_early": face, "bands": True})
     if w:
         m = st.columns(3)
