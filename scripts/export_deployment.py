@@ -8,29 +8,22 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from services.ledger.local_chain import read_broadcast  # noqa: E402
+
 CONTRACTS = ["InvoiceRegistry", "AgreementLedger"]
 
 
 def main(chain_id: str, network: str) -> None:
-    broadcast = json.loads((ROOT / f"contracts/broadcast/Deploy.s.sol/{chain_id}/run-latest.json").read_text())
-    receipts = {r["transactionHash"]: r for r in broadcast["receipts"]}
-    contracts, setup_txs = {}, []
-    for tx in broadcast["transactions"]:
-        receipt = receipts.get(tx["hash"], {})
-        entry = {"tx_hash": tx["hash"], "block": int(receipt.get("blockNumber", "0x0"), 16)}
-        if tx["transactionType"] == "CREATE":
-            contracts[tx["contractName"]] = {"address": tx["contractAddress"], **entry}
-        else:
-            setup_txs.append({"function": tx.get("function") or "transfer", "to": tx["transaction"]["to"], **entry})
-
-    out = {"network": network, "chain_id": int(chain_id), "contracts": contracts, "setup_transactions": setup_txs}
+    out = read_broadcast(int(chain_id), network)
     (ROOT / "deployments").mkdir(exist_ok=True)
     (ROOT / f"deployments/{network}.json").write_text(json.dumps(out, indent=2) + "\n")
 
     for name in CONTRACTS:
         artifact = json.loads((ROOT / f"contracts/out/{name}.sol/{name}.json").read_text())
         (ROOT / f"services/ledger/abi/{name}.json").write_text(json.dumps(artifact["abi"], indent=2) + "\n")
-    print(json.dumps(contracts, indent=2))
+    print(json.dumps(out["contracts"], indent=2))
 
 
 if __name__ == "__main__":

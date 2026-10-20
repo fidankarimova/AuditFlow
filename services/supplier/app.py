@@ -8,8 +8,10 @@ from fastapi import FastAPI, HTTPException
 from engine.stress import SCENARIOS, compare, simulate
 from pydantic import BaseModel, Field
 
+from services.common.llm import get_backend
+from services.common.negotiator import MAX_ROUNDS
 from services.common.ratelimit import EvaluationBudget, EvaluationLimitExceeded
-from services.supplier import data
+from services.supplier import agents, data
 from services.supplier.policy import SupplierPolicy
 
 app = FastAPI(title="Alpha Foods workspace")
@@ -25,6 +27,20 @@ def _policy(invoice_number: str) -> SupplierPolicy:
         except ValueError as e:
             raise HTTPException(404, str(e)) from e
     return _policies[invoice_number]
+
+
+class Offer(BaseModel):
+    x: float
+    d: float
+
+
+class TurnRequest(BaseModel):
+    negotiation_id: str
+    invoice_number: str
+    round: int = Field(ge=1, le=MAX_ROUNDS)
+    reference: Offer
+    last_offer: Offer | None = None
+    history: list[dict] = []
 
 
 class EvaluateRequest(BaseModel):
@@ -89,7 +105,41 @@ def alternatives(invoice_number: str):
 @app.post("/evaluate")
 def evaluate(req: EvaluateRequest):
     try:
-        budget.charge(req.negotiation_id)
+        budget.charge(req.negotiation_id, req.invoice_number)
     except EvaluationLimitExceeded as e:
         raise HTTPException(429, str(e)) from e
     return _policy(req.invoice_number).evaluate(req.x, req.d)
+
+
+@app.get("/invoices/{invoice_number}")
+def invoice(invoice_number: str):
+    doc = data.invoice_document(conn, invoice_number)
+    if doc is None:
+        raise HTTPException(404, "unknown invoice")
+    return doc
+
+
+@app.post("/agents/risk/run")
+def run_risk_agent():
+    return agents.risk_agent(conn, get_backend())
+
+
+@app.post("/agents/strategy/run")
+def run_strategy_agent():
+    return agents.strategy_agent(conn, get_backend())
+
+
+@app.post("/agents/seller/turn")
+def seller_turn(req: TurnRequest):
+    try:
+        negotiator = agents.seller_agent(conn, req.invoice_number, get_backend())
+    except ValueError as e:
+        raise HTTPException(404, str(e)) from e
+    turn = req.model_dump()
+    turn["invoice_memo"] = negotiator_memo(req.invoice_number)  # untrusted document text, wrapped by the agent
+    return negotiator.turn(turn)
+
+
+def negotiator_memo(invoice_number: str) -> str | None:
+    doc = data.invoice_document(conn, invoice_number)
+    return doc["memo"] if doc else None

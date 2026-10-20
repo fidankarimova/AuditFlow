@@ -7,9 +7,12 @@ from fastapi.testclient import TestClient
 from services.bank_sandbox import app as bank_app
 from services.bank_sandbox import data as bank_data
 from services.common import webhook_sig
+from services.common.audit import AuditLog
+from services.common.config import Settings
 from services.coordinator import app as coordinator_app
 from services.coordinator import payments
 from services.coordinator.bank_client import BankClient, BankRejected, BankUnavailable
+from services.ledger.client import NoLedger
 
 SECRET = "test-webhook-secret"
 AMOUNT = 58_800_00  # 58,800.00 TL in kuruş
@@ -24,8 +27,13 @@ class Env:
     """Bank sandbox + coordinator webhook receiver wired together in-process."""
 
     def __init__(self, tmp_path, webhook_sender=None, executor=_inline, step_seconds=0.0, fail_rate=0.0):
-        self.tracker = payments.PaymentTracker(payments.connect(tmp_path / "coordinator.db"), SECRET)
-        self.coordinator = TestClient(coordinator_app.create_app(self.tracker))
+        settings = Settings(_env_file=None, bank_webhook_secret=SECRET, ledger_target="none")
+        coord = coordinator_app.build_coordinator(
+            db_path=tmp_path / "coordinator.db", ledger=NoLedger(settings),
+            bank=BankClient(base_url="http://unused"), supplier=None, buyer=None,
+            audit=AuditLog(tmp_path / "audit.jsonl"), settings=settings)
+        self.tracker = coord.tracker
+        self.coordinator = TestClient(coordinator_app.create_app(coord))
         self.log_path = tmp_path / "bank_log.jsonl"
         self.db_path = tmp_path / "bank.db"
         self.delivered = []

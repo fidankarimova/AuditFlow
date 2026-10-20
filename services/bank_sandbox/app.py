@@ -67,7 +67,7 @@ class OutageRequest(BaseModel):
 
 def _http_webhook_sender(url: str) -> Callable[[bytes, dict], int]:
     def send(body: bytes, headers: dict) -> int:
-        return httpx.post(url, content=body, headers=headers, timeout=5).status_code
+        return httpx.post(url, content=body, headers=headers, timeout=20).status_code
 
     return send
 

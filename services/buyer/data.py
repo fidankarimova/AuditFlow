@@ -66,3 +66,22 @@ def load_profile(conn: sqlite3.Connection) -> LiquidityProfile:
         sales_mean=c["sales_mean"], sales_sd=c["sales_sd"],
         expense_mean=c["expense_mean"], expense_sd=c["expense_sd"], as_of=as_of,
     )
+
+
+def check_invoice(conn: sqlite3.Connection, doc: dict) -> dict:
+    """Does a supplier's invoice match a payable Beta Markets actually owes? Used before its human confirms."""
+    payable = next((p for p in payables(conn) if p["number"] == doc.get("number")), None)
+    if payable is None:
+        return {"matches": False, "mismatches": ["no such payable"]}
+    mismatches = []
+    if doc.get("seller") != payable["supplier"]:
+        mismatches.append("seller")
+    if doc.get("buyer") != company(conn)["name"]:
+        mismatches.append("buyer")
+    if abs(float(doc.get("face", -1)) - payable["face"]) > 0.005:
+        mismatches.append("face amount")
+    if doc.get("due_date") != payable["due_date"]:
+        mismatches.append("due date")
+    if doc.get("currency") != "TRY":
+        mismatches.append("currency")
+    return {"matches": not mismatches, "mismatches": mismatches}

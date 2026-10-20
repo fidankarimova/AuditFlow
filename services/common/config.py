@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore")
 
     # Ledger
-    ledger_target: Literal["fisco", "evm"] = "evm"
+    ledger_target: Literal["fisco", "evm", "none"] = "evm"
     rpc_url: str = "https://sepolia.base.org"
     chain_id: int = 84532
     admin_private_key: str = ""
@@ -34,6 +34,11 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     llm_model: str = ""
     llm_mode: Literal["offline", "online"] = "offline"
+
+    # Service URLs
+    supplier_url: str = "http://127.0.0.1:8101"
+    buyer_url: str = "http://127.0.0.1:8102"
+    coordinator_url: str = "http://127.0.0.1:8200"
 
     # Optimizer
     allow_partial: bool = True

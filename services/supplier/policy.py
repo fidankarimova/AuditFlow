@@ -68,21 +68,34 @@ class SupplierPolicy:
         residual = max(0.0, self.needed - x * (1 - d))
         return self.batna_cost - (x * d + bank_loan_cost(residual, self.bank, self.days))
 
-    def evaluate(self, x: float, d: float) -> dict:
+    def check(self, x: float, d: float) -> dict:
+        """Own-limit check with the names of failed limits (no values). Used by evaluate() and the Seller Agent."""
         c, face = self.company, self.invoice["face"]
-        infeasible = {"feasible": False, "gain_bucket": 0}
-        if self.no_action_needed or not (0 < x <= face) or not (0 < d <= c["d_max"]) or x * (1 - d) < c["min_net"]:
-            return infeasible
+        failed = []
+        if self.no_action_needed:
+            failed.append("no_action_needed")
+        if not 0 < x <= face:
+            failed.append("invoice_face_amount")
+        if not 0 < d <= c["d_max"]:
+            failed.append("max_discount")
+        if x * (1 - d) < c["min_net"]:
+            failed.append("min_net_amount")
+        if failed:
+            return {"ok": False, "gain_bucket": 0, "failed": failed}
         gain = self.gain(x, d)
         if gain <= 0:
-            return infeasible
+            return {"ok": False, "gain_bucket": 0, "failed": ["gain_vs_best_alternative"]}
         residual = max(0.0, self.needed - x * (1 - d))
         after = self.profile.with_flow(0, x * (1 - d)).with_receivable_amount(self.invoice["number"], face - x)
         if residual > 0:
             after = after.with_flow(self.bank.arrival_days, residual)
         if simulate(after).p_breach > self.alpha:
-            return infeasible
-        return {"feasible": True, "gain_bucket": int(round(gain / GAIN_BUCKET))}
+            return {"ok": False, "gain_bucket": 0, "failed": ["liquidity_risk_limit"]}
+        return {"ok": True, "gain_bucket": int(round(gain / GAIN_BUCKET)), "failed": []}
+
+    def evaluate(self, x: float, d: float) -> dict:
+        r = self.check(x, d)
+        return {"feasible": r["ok"], "gain_bucket": r["gain_bucket"]}
 
     def summary(self) -> dict:
         """What the supplier shares with the coordinator to start a negotiation (no limits, no BATNA cost)."""

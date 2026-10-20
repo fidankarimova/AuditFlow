@@ -2,7 +2,7 @@ SHELL := /bin/bash
 FORGE ?= forge
 PYTHON ?= .venv/bin/python
 
-.PHONY: install build test test-contracts test-py coverage deploy deploy-local ping up bank coordinator supplier buyer demo ui
+.PHONY: install build test test-contracts test-py coverage deploy deploy-local ping up bank coordinator supplier buyer flow audit-verify demo ui
 
 install:
 	python3 -m venv .venv
@@ -59,6 +59,13 @@ up:
 	  $(UVICORN) $$app & pids="$$pids $$!"; \
 	done; \
 	trap "kill $$pids 2>/dev/null" EXIT INT TERM; wait
+
+# Full flow over real services (local anvil chain if Foundry is installed, otherwise ledger disabled)
+flow:
+	$(PYTHON) -m services.coordinator.run_flow --offline
+
+audit-verify:
+	$(PYTHON) -m services.common.audit verify
 
 demo:
 	@echo "TODO (Phase 9): $(PYTHON) scripts/run_demo_scenario.py"
